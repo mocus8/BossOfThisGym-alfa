@@ -1,0 +1,2176 @@
+/*
+@media (min-width: 768px) and (max-width: 991px) {
+    .header_search {
+        width: 60%;
+        height: 63.5%;
+    }
+}
+*/
+
+::-webkit-scrollbar {
+    width: 0.75vw;  
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #BD1B1B;
+    border-radius: 0.2vw;
+}
+
+@font-face {
+    font-family: "Jost";
+    src: url(./font/Jost_Italic.woff2) format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Jaro";
+    src: url(./font/Jaro_Regular.woff2) format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+a {
+    color: inherit;
+    display: contents;
+    text-decoration: none;
+}
+
+button {
+    all: unset;
+}
+
+.body {
+    margin: auto;
+    width: 100%;
+    height: 100vh;
+    background-image: url(./img/desktop.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    pointer-events: all;
+    cursor: wait;
+}
+
+.loader {
+    width: 15%;
+    height: auto;
+    animation: spin 1.5s linear infinite;
+    pointer-events: none;
+}
+
+/* .loading-text {
+    color: #BD1B1B;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+    font-weight: bold;
+} */
+
+.loader-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.desktop {
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.desktop_visible {
+    opacity: 1;
+}
+
+.header{
+    position: relative;
+    width: 100%;
+    height: 27.5%;
+    max-height: 15vw;
+    background-image: url("./img/header_back.svg");
+    background-position: center;
+    background-size: 97% 100%;
+    background-repeat: no-repeat;
+}
+
+.internet_shop {
+    position: absolute;
+    left: 2.25%;
+    font-size: 1.15vw;
+    font-family: "Jost", Arial;
+}
+
+.boss_of_this_gym{
+    position: absolute;
+    left: 2.5%;
+    top: 10%;
+    font-size: 2.5vw;
+    font-family: "Jaro", Arial;
+    text-shadow: 0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5); 
+}
+
+.icon_billy {
+    position: absolute;
+    left: 2.25%;
+    bottom: 4%;
+    object-fit: fill;
+    height: 8.25vw;
+    transform-origin: bottom;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    background-color: transparent;
+}
+
+.icon_billy:hover {
+    transform: scaleX(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.header_buttons {
+    position: absolute;
+    left: 24%;
+    top: 3.75%;
+    width: 73%;
+    height: 25%;
+    display: flex;
+}
+
+.header_button{
+    position: relative;
+    width: 25%;
+    height: 100%;
+    background-image: url("./img/header_button_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.header_button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.header_button_click{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.header_button_icon{
+    position: relative;
+    width: 10%;
+    height: 50%;
+}
+
+.header_button_text {
+    position: relative;
+    margin-left: 4%;
+    font-size: 1.35vw;
+    font-family: "Jost", Arial;
+}
+
+.header_search {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 71.75%;
+    height: 63.5%;
+    background-image: url("./img/header_search_back.svg");
+    background-position: bottom center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.header_search_click {
+    position: absolute;
+    display: inline-flex;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -37.5%);
+    width: 77.5%;
+    height: 60%;
+    background-image: url("./img/header_search_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.header_search_icon {
+    position: relative;
+    width: 5.5%;
+    margin-left: 1.5%;
+}
+
+.header_search_text {
+    position: relative;
+    margin-left: 1%;
+    margin-right: 2%;
+    font-size: 1.5vw;
+    font-family: "Jost", Arial;
+}
+
+.header_search_input {
+    font-size: 1.5vw;
+    font-family: "Jost", Arial;
+    background: none;
+    border: none;
+    outline: none;
+    width: 70%;
+}
+
+.header_account {
+    position: absolute;  
+    right: 1.5%;      
+    bottom: 0;   
+    width: 20.25%;
+    height: 63.5%;
+    background-image: url("./img/header_account_back.svg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.header_account_icon {
+    position: absolute;
+    width: 15%;
+    left: 15%;
+    top: 4%;
+}
+
+.header_account_data {
+    position: absolute;
+    margin-top: 0.5vw;
+    margin-left: 6.7vw;
+    width: 60%;
+}
+
+.header_account_inf {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    overflow-x: ellipsis;
+    font-size: 1.2vw;
+    font-family: "Jost", Arial;
+    text-align: center;
+}
+
+.header_account_buttons_logged_in {
+    position: absolute;
+    margin-left: 7vw;
+    bottom: 12.5%;
+    width: 50%;
+    height: 34%;
+    background-image: url("./img/header_account_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 2.5vw;
+    gap: 0.9vw;
+}
+
+.header_account_button_logged_in {
+    width: 2vw;
+    height: 2vw;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.header_account_button_logged_in_icon {
+    width: 2vw;
+    height: 2vw;
+}
+
+.header_account_button_logged_in:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.header_account_button_logged_in:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.header_account_button_guest {
+    position: relative;
+    margin-left: 32%;
+    margin-top: 5%;
+    width: 65%;
+    height: 27.5%;
+    background-image: url("./img/header_account_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    font-size: 1.08vw;
+    font-family: "Jost", Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    background-color: transparent;
+}
+
+.header_account_button_guest:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.header_account_button_guest:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.authorization_modal_blur {
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .3);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.authorization_modal {
+    z-index: 9999;
+    position: fixed;
+    left: 50%;
+    top: 32.5%;
+    transform: translateX(-50%);
+    width: 50vw;
+    height: 16vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.authorization_modal_entry_text {
+    position: relative;
+    margin-top: 1%;
+    margin-left: 37.5%;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+}
+
+.authorization_modal_form {
+    margin-left: 10%;
+    display: flex;
+    flex-direction: column;
+}
+.authorization_modal_input_back {
+    position: relative;
+    margin-top: 1%;
+    width: 40vw;
+    height: 3vw;
+    padding: 0.5vw 1vw;
+    box-sizing: border-box;
+    background-image: url("./img/header_search_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+}
+
+.authorization_modal_input_text {
+    margin-right: 1%;
+    white-space: nowrap;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.authorization_modal_input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 0;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.authorization_modal_buttons {
+    margin-left: 10%;
+    width: 30vw;
+    height: 4.8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.authorization_modal_button {
+    position: relative;
+    width: 12.5vw;
+    height: 55%;
+    background-image: url("./img/header_button_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.authorization_modal_button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.authorization_modal_button:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.authorization_modal_blur.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.error_modal_icon {
+    margin-left: 0.5vw;
+    width: 1.6vw;
+    height: 1.6vw;
+}
+
+.error_modal_text {
+    font-family: "Kolibri Light", "Kolibri-Light", "Kolibri", sans-serif;
+    font-size: 0.9vw;
+    font-weight: 100;
+}
+
+.uknown_user_back {
+    position: absolute;
+    margin-top: 2vw;;
+    margin-left: 22vw;
+    width: 17.5vw;
+    height: 3vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5vw;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.uknown_user_back.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.wrong_password_back {
+    position: absolute;
+    margin-top: 2vw;;
+    margin-left: 26vw;
+    width: 11vw;
+    height: 3vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    padding-right: 1vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5vw;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.wrong_password_back.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.registration_modal_blur {
+    z-index: 999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .3);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.registration_modal {
+    z-index: 9999;
+    position: fixed;
+    left: 50%;
+    top: 32.5%;
+    transform: translateX(-50%);
+    width: 50vw;
+    height: 23.5vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.registration_modal_entry_text {
+    position: relative;
+    margin-top: 1%;
+    margin-left: 42.5%;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+}
+
+.registration_modal_form {
+    margin-left: 10%;
+    display: flex;
+    flex-direction: column;
+}
+.registration_modal_input_back {
+    position: relative;
+    margin-top: 1%;
+    width: 40vw;
+    height: 3vw;
+    padding: 0.5vw 1vw;
+    box-sizing: border-box;
+    background-image: url("./img/header_search_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+}
+
+.registration_modal_input_text {
+    margin-right: 1%;
+    white-space: nowrap;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.registration_modal_input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 0;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.old_password_missmatch_back {
+    position: absolute;
+    margin-top: 5.5vw;;
+    margin-left: 26vw;
+    width: 11vw;
+    height: 3vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    padding-right: 1vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5vw;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.old_password_missmatch_back.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.registration_modal_buttons {
+    margin-left: 0;
+    width: 39vw;
+    height: 4.8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.registration_modal_button {
+    position: relative;
+    width: 18vw;
+    height: 55%;
+    background-image: url("./img/header_button_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    font-size: 1.5vw;
+    font-family: "Jost", Arial;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.registration_modal_button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.registration_modal_button:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.registration_modal_blur.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.authorization_modal_input:-webkit-autofill,
+.authorization_modal_input:-webkit-autofill:hover, 
+.authorization_modal_input:-webkit-autofill:focus,
+.registration_modal_input:-webkit-autofill,
+.registration_modal_input:-webkit-autofill:hover,
+.registration_modal_input:-webkit-autofill:focus {
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: transparent !important;
+}
+
+.user_already_exists_back {
+    position: absolute;
+    margin-top: 2vw;;
+    margin-left: 26.5vw;
+    width: 11.5vw;
+    height: 3vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5vw;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.user_already_exists_back.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.incorrect_phone_number_back {
+    position: absolute;
+    margin-top: 3.75vw;;
+    margin-left: 24vw;
+    width: 15vw;
+    height: 3vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5vw;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.incorrect_phone_number_back.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.password_mismatch_back {
+    position: absolute;
+    margin-top: 9vw;;
+    margin-left: 26.5vw;
+    width: 12.5vw;
+    height: 3vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5vw;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.password_mismatch_back.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.account_edit_modal_entry_text {
+    position: relative;
+    margin-top: 1%;
+    margin-left: 30%;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+}
+
+.account_edit_modal {
+    z-index: 9999;
+    position: fixed;
+    left: 50%;
+    top: 36%;
+    transform: translateX(-50%);
+    width: 50vw;
+    height: 20vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.account_edit_modal_password_button {
+    font-size: 1.5vw;
+    font-family: "Jost", Arial;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.account_edit_modal_password_button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.account_edit_modal_password_button:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.account_delete_modal {
+    z-index: 9999;
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    transform: translateX(-50%);
+    width: 50vw;
+    height: 9vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.account_delete_modal_entry_text {
+    position: relative;
+    margin-top: 1%;
+    margin-left: 18%;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+}
+
+.main {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 80%;
+    display: flex;
+}
+
+.footer {
+    position: relative;
+    width: 100%;
+    height: 15%;
+    max-height: 7.5vw;
+}
+
+.footer_inf {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 97%;
+    height: 100%;
+    background-color: #BD1B1B;
+    display: flex;
+    gap: 4%;
+}
+
+.footer_disklamer {
+    position: relative;
+    margin-left: 0.5%;
+    width: 22.5%;
+    height: 100%;
+    font-size: 1vw;
+    font-family: "Jost", Arial;
+    display: flex;
+    text-align: justify;
+    align-items: center; 
+}
+
+.footer_mail {
+    position: relative;
+    width: 25%;
+    height: 100%;
+    font-size: 1.4vw;
+    font-family: "Jost", Arial;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.footer_social {
+    position: relative;
+    width: 25%;
+    height: 100%;
+    font-size: 1.4vw;
+    font-family: "Jost", Arial;
+    display: flex;
+    align-items: center;
+}
+
+.footer_social_img {
+    position: relative;
+    margin-left: 6%;
+    width: 5vw;
+    height: 5vw;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.footer_social_img:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.footer_pay {
+    position: relative;
+    width: 25%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 7%;
+}
+
+.footer_pay_img {
+    position: relative;
+    width: 5vw;
+    height: 2.75vw;
+}
+
+
+.colour_href:hover {
+    color: blue;
+}
+
+.catalog {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.category_row {
+    margin-left: 1.5%;
+    margin-bottom: 1vw;
+    width: 97%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.category_name {
+    width: 13%;
+    height: 4vw;
+    background-image: url("./img/side_button_click.svg"), url("./img/side_button_back.svg");
+    background-position: 20% 55%, 0% 0%;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 85% 77.5%, 100% 120%;
+    padding-left: 1vw;
+    display: flex;
+    align-items: center;
+    transform-origin: left center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    background-color: transparent;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.products_main {
+    margin-right: 0;
+    margin-left: 1vw;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.45vw;
+}
+
+.product {
+    width: 15.8vw;
+    height: 21vw;
+    background-image: url("./img/product_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.product:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.product:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.product_click {
+    position: relative;
+    width: 93%;
+    height: 94.5%;
+    background-image: url("./img/product_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.product_img_1 {
+    position: relative;
+    width: 100%;
+}
+
+.product_name_1 {
+    position: absolute;
+    margin-left: 4%;
+    margin-right: 4%;
+    top: 74%;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.product_price_1 {
+    position: absolute;
+    right: 3%;
+    bottom: 1%;
+    font-size: 1.3vw;
+    font-weight: 600;
+    font-family: "Jost", Arial;
+}
+
+.product_left {
+    position: relative;
+    margin-top: 0.75vw;
+    margin-bottom: 1.5vw;
+    margin-left: 1.5%;
+    width: 58.25%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.button_return_position {
+    position: absolute;
+    margin-top: 0.75vw;
+    margin-bottom: 1.5vw;
+    margin-left: 1.5%;
+    width: 58.25%;
+    display: flex;
+}
+
+.button_return {
+    position: relative;
+    margin-bottom: 10%;
+    width: 14.5%;
+    height: 7.5vw;
+    background-image: url("./img/button_return_click.svg"), url("./img/button_return_back.svg");
+    background-position: 37.5% 25%, 0% 0%;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 82.5% 75%, 100% 100%;
+    transform-origin: left top;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.button_return:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.button_return:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.button_return_text {
+    margin-left: 9%;
+    margin-top: 5%;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.button_return_img {
+    position: absolute;
+    margin-left: 10%;
+    margin-top: 0;
+    width: 30%;
+    height: 30%;
+}
+
+.product_minor_images {
+    position: absolute;
+    margin-top: 4.85vw;
+    width: 14.5%;
+    height: 48.9vw;
+    box-sizing: border-box;
+    background-image: url("./img/product_minor_images_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 5vw 0;
+    justify-content: first baseline;
+    gap: 0.5vw;
+}
+
+.product_minor_images_button {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.product_minor_images_button:hover {
+    cursor: pointer;
+    transform: scale(1.15);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.product_minor_images_button:active {
+    transform: scale(1);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.product_img_2 {
+    margin-left: 16.75%;
+    border-radius: 0.5vw;
+    width: 62.5%;
+}
+
+.product_main_img {
+    position: absolute;
+    width: 46.55vw;
+    margin-left: 16.65%;
+}
+
+.product_description_head {
+    position: absolute;
+    margin-top: 50.5vw;
+    width: 97.75%;
+    height: 5.35vw;
+    background-image: url("./img/product_description_head_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+    padding-top: 1.1vw;
+    padding-left: 12.5%;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+}
+
+.product_description_text {
+    position: relative;
+    margin-top: 41.8vw;
+    box-sizing: border-box;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 1.5vw;
+    padding-bottom: 1.5vw;
+    width: 97.2%;
+    height: auto;
+    background-color: #BD1B1B;
+    font-size: 1.4vw;
+    font-family: "Jost", Arial;
+}
+
+.product_right {
+    position: sticky;
+    top: 1.35vw;
+    margin-top: 0.75vw;
+    width: 38.75%;
+    margin-right: 1.5%;
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+}
+
+.product_inf {
+    position: relative;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    background-image: url("./img/product_inf_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding-left: 3.25%;
+    padding-top: 0.17vw;
+    padding-bottom: 1.25vw;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+.product_name_2 {
+    margin-bottom: 1.5vw;
+    max-width: 95%;
+    font-size: 2.5vw;
+    line-height: 1.25;
+    font-family: "Jost", Arial;
+}
+
+.product_price_2 {
+    margin-bottom: 1.5vw;
+    font-size: 2.5vw;
+    font-weight: 600;
+    font-family: "Jost", Arial;
+}
+
+.product_availability {
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+}
+
+.product_button_add_not_in_cart {
+    position: relative;
+    margin-left: 1%;
+    margin-top: 0.75vw;
+    width: 55%;
+    height: 6.5vw;
+    box-sizing: border-box;
+    background-image: url("./img/side_button_click.svg"), url("./img/side_button_back.svg");
+    background-position: 20% 55%, 0% 0%;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 85% 77.5%, 100% 120%;
+    text-align: left;
+    padding-left: 1.135vw;
+    padding-top: 0;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+    background-color: transparent;
+    transform-origin: left top;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    display: none;
+    opacity: 0;
+    /* transition: opacity .4s, visibility .4s; */
+}
+
+.product_button_add_not_in_cart:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.product_button_add_not_in_cart:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.product_button_add_not_in_cart.open {
+    display: block;
+    opacity: 1;
+}
+
+.product_button_add_in_cart {
+    position: relative;
+    margin-left: 1%;
+    margin-top: 0.75vw;
+    width: 55%;
+    height: 6.5vw;
+    box-sizing: border-box;
+    background-image: url("./img/side_button_click.svg"), url("./img/side_button_back.svg");
+    background-position: 20% 55%, 0% 0%;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 85% 77.5%, 100% 120%;
+    display: flex;
+    align-items: center;
+    gap: 8%;
+    padding-left: 8%;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+    background-color: transparent;
+    transform-origin: left top;
+    display: none;
+    opacity: 0;
+}
+
+.product_button_add_in_cart.open {
+    display: flex;
+    opacity: 1;
+}
+
+.cart_empty {
+    position: relative;
+    margin-top: 12.5%;
+    margin-left: 40%;
+    width: 17.25vw;
+    height: 4.75vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+    padding-top: 0.5%;
+    padding-left: 4%;
+}
+
+.cart_in_cart_text {
+    position: absolute;
+    margin-top: 0.75vw;
+    margin-left: 10.25%;
+    width: 14%;
+    height: 3.25vw;
+    box-sizing: border-box;
+    background-image: url("./img/side_button_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding-left: 0.5%;
+    padding-top: 0.25vw;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.cart_products {
+    position: relative;
+    margin-left: 4.75%;
+    margin-top: 7.5vw;
+    margin-bottom: 1.5vw;
+    width: 54%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 2.75vw;
+}
+
+.cart_product {
+    position: relative;
+    width: 15.7vw;
+    height: 26vw;
+    background-image: url("./img/product_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.cart_product:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.cart_product:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.cart_product_name {
+    position: absolute;
+    margin-left: 4%;
+    margin-right: 4%;
+    top: 60%;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.cart_product_price {
+    position: absolute;
+    right: 3%;
+    top: 75%;
+    font-size: 1.3vw;
+    font-weight: 600;
+    font-family: "Jost", Arial;
+}
+
+.product_interaction {
+    position: relative;
+    top: 24%;
+    margin-left: 4%;
+    margin-right: 4%;
+    height: 3vw;
+    display: flex;
+    align-self: flex-start;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product_interaction_count {
+    position: relative;
+    margin-left: 4%;
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-self: flex-start;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product_sign_button {
+    cursor: pointer;
+}
+
+.product_sign_button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.product_interaction_sign {
+    position: relative;
+    width: 2.5vw;
+    height: 2.5vw;
+}
+
+.product_interaction_amount{
+    position: relative;
+    font-size: 1.3vw;
+    font-weight: 600;
+    font-family: "Jost", Arial; 
+}
+
+.product_interaction_delete {
+    position: relative;
+    margin-right: 4%;
+    width: 2.75vw;
+    height: 2.75vw;
+}
+
+.cart_right {
+    position: sticky;
+    top: 1.35vw;
+    margin-top: 0.75vw;
+    margin-right: 3.75%;
+    transform: translateX(2.75%);
+    width: 38.75%;
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+}
+
+.order_icon {
+    position: absolute;
+    margin-top: 0.5vw;
+    margin-left: 16%;
+    width: 6vw;
+    height: 6vw;
+    z-index: 1;
+}
+
+.order_inf {
+    position: relative;
+    width: 100%;
+    height: 20vw;;
+    background-image: url("./img/header_account_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    padding-right: 3.25%;
+}
+
+.order_inf_price_text {
+    position: absolute;
+    margin-top: 1.75%;
+    width: fit-content;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+}
+
+.order_inf_amount {
+    position: absolute;
+    margin-top: 18%;
+    width: fit-content;
+    font-size: 1.35vw;
+    font-family: "Jost", Arial;
+}
+
+.order_inf_price_1 {
+    position: absolute;
+    margin-top: 22.5%;
+    width: fit-content;
+    font-size: 1.35vw;
+    font-family: "Jost", Arial;
+}
+
+.order_inf_discount {
+    position: absolute;
+    margin-top: 25.5%;
+    width: fit-content;
+    font-size: 1.35vw;
+    font-family: "Jost", Arial;
+}
+
+.order_inf_price_2 {
+    position: absolute;
+    margin-top: 35%;
+    width: fit-content;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+}
+
+.order_start {
+    position: absolute;
+    margin-top: 53.25%;
+    margin-left: 47.5%;
+    width: 55.75%;
+    height: 5.5vw;
+    background-image: url("./img/order_start_click.svg"), url("./img/order_start_back.svg");
+    background-position: 75% 55%, 0% 0%;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 85% 77.5%, 100% 120%;
+    display: flex;
+    align-items: center;
+    transform-origin: right top;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.order_start:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.order_start:active {
+    transform: scale(1);
+    transition: transform 0.05s ease;
+    cursor: pointer
+}
+
+.order_start_text {
+    margin-left: 26%;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+}
+
+.contacts {
+    position: relative;
+    margin-left: 16.75%;
+    margin-top: 4.5vw;
+    margin-bottom: 1.5vw;
+    width: 67vw;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.5vw;
+}
+
+.contact {
+    position: relative;
+    width: 67vw;
+    height: 12vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.contact_type {
+    margin-left: 8%;
+    font-size: 2vw;
+    font-family: "Jost", Arial;
+}
+
+.contact_inf {
+    margin-left: 15%;
+    margin-top: 0.75vw;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+}
+
+.stores {
+    position: relative;
+    margin-top: 8.4vw;
+    margin-bottom: 0.85vw;
+    margin-left: 1.5%;
+    flex-shrink: 0;
+    width: 25.55%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    font-family: "Jost", Arial;
+    font-size: 1.3vw;
+}
+
+.store {
+    position: relative;
+    margin-top: -3.8vw;
+    height: 27vw;
+    width: 100%;
+    background-image: url("./img/store_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding-top: 2vw;
+}
+
+.store_name {
+    margin-top: 2vw;
+    margin-left: 45%;
+    width: 50%;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+    text-align: end;
+}
+
+.store_address {
+    margin-top: 1.35vw;
+    margin-left: 5%;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.store_time {
+    margin-top: 0.65vw;
+    margin-left: 5%;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.store_button {
+    margin-top: 1.25vw;
+    margin-left: 3.25%;
+    width: 27.5%;
+    height: 3.6vw;
+    background-image: url("./img/button_return_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+    padding-left: 4%;
+    padding-top: 0.25vw;
+    transform-origin: left center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.store_button:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.store_button:active {
+    transform: scale(1);
+    transition: transform 0.05s ease;
+    cursor: pointer;
+}
+
+.stores_right {
+    position: sticky;
+    top: 1.35vw;
+    margin-left: auto;
+    margin-right: 1.5vw;
+    margin-top: 0.75vw;
+    margin-bottom: 0.75vw;
+    align-self: flex-start;
+}
+
+.yandex_map_back {
+    position: relative;
+    z-index: 2;
+    width: 66vw;
+    height: 47.5vw;
+    background-image: url("./img/yandex_map_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    pointer-events: none;
+}
+
+.stores_map_loader {
+    position: absolute;
+    z-index: 1;
+    top: 2.125vw;
+    right: 2.6vw;
+    width: 60.5vw;
+    height: 42.7vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:#BD1B1B;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+#stores-map {
+    position: absolute;
+    z-index: 1;
+    top: 2.125vw;
+    right: 2.6vw;
+    width: 60.5vw;
+    height: 42.7vw;
+}
+
+.customers_infos {
+    position: relative;
+    top: 1.35vw;
+    margin-left: 14.5%;
+    margin-bottom: 1.5vw;
+    width: 60vw;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2.1vw;
+}
+
+.customers_inf {
+    position: relative;
+    width: 60vw;
+    height: 6.5vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    text-align: center;
+    padding-left: 7.5%;
+    padding-right: 7.5%;
+    padding-top: 0.75%;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+}
+
+.error_back {
+    position: absolute;
+    top: 4vw;
+    left: 47.5%;
+    transform: translateX(-47.5%);
+    width: 42.5vw;
+    height: 15vw;
+    background-image: url("./img/404_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.error_name {
+    position: absolute;
+    top: 1vw;
+    left: 14vw;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+}
+
+.error_text {
+    position: absolute;
+    top: 6vw;
+    left: 1.25vw;
+    width: 40vw;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+    text-align: center;
+}
+
+.order_types {
+    position: absolute;
+    margin-top: 0.7vw;
+    margin-left: 25vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5vw;
+}
+
+.order_type {
+    width: 12.5vw;
+    height: 2.5vw;
+    background-image: url("./img/header_button_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    font-size: 1.5vw;
+    font-family: "Jost", Arial;
+    text-align: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.order_type.chosen {
+    transform: scale(1.15);
+    width: 14vw;
+}
+
+.order_type:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.order_type:active {
+    transform: scale(1);
+    transition: transform 0.05s ease;
+    cursor: pointer;
+}
+
+.modal_order_type {
+    z-index: 2;
+    margin-top: 5vw;
+    margin-bottom: 0.7vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    visibility: hidden;
+    display: none;
+    flex-direction: row;
+    gap: 1.5vw;
+}
+
+.modal_order_type.open {
+    visibility: visible;
+    display: flex;
+}
+
+.order_left {
+    display: flex;
+    flex-direction: column;
+}
+
+.map_search_form {
+    position: relative;
+    width: 35vw;
+    margin-bottom: 1vw;
+    display: flex;
+    gap: 1.5vw;
+    justify-content: center;
+}
+
+.map_search_input {
+    width: 20vw;
+    height: 2.5vw;
+    box-sizing: border-box;
+    padding-left: 0.5vw;
+    border: 0.15vw solid black;
+    outline: none;
+    border-radius: 0.5vw;
+    background-color: #4B4B4B;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.map_search_input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #4B4B4B inset;
+    -webkit-text-fill-color: #000;
+}
+
+.suggestions-suggestions {
+    z-index: 3;
+    position: absolute;
+    left: 3.5vw;
+    top: 100%;
+    width: 19.75vw;
+    max-height: 12.5vw;
+    overflow-y: auto;
+    background: white;
+    border: 0.15vw solid black;
+    border-top: none;
+    border-radius: 0.5vw;
+    display: none;
+    font-family: "Jost", Arial;
+}
+
+.suggestions-hint {
+    display: none;
+}
+
+.suggestions-suggestion {
+    padding: 0.5vw 0.5vw;
+    cursor: pointer;
+    border-bottom: 0.15vw solid #f0f0f0;
+    font-size: 1vw;
+    transition: background-color 0.2s ease;
+    font-family: "Jost", Arial;
+    color: black;
+    display: block;
+    line-height: 1.4;
+}
+
+.suggestions-suggestion:hover {
+    background-color: #4B4B4B;
+    color: white;
+}
+
+.suggestions-suggestion:last-child {
+    border-bottom: none;
+}
+
+.suggestions-selected {
+    background-color: #4B4B4B;
+    color: white;
+}
+
+.suggestions-promo {
+    display: none;
+}
+
+.map_search_btn {
+    width: 5vw;
+    height: 2.5vw;
+    box-sizing: border-box;
+    border: 0.15vw solid black;
+    border-radius: 0.5vw;
+    background-color: #4B4B4B;
+    text-align: center;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.map_search_btn:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.map_search_btn:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.map_container {
+    width: 35vw;
+    height: 35vw;
+    border: 0.15vw solid black;
+    border-radius: 0.5vw;
+    overflow: hidden;
+}
+
+.order_map_loader {
+    width: 35vw;
+    height: 35vw;
+    background-color: #BD1B1B; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .2s, visibility .2s;
+}
+
+.error_stores_map {
+    position: absolute;
+    z-index: 1;
+    top: 2.15vw;
+    right: 2.6vw;
+    width: 60.5vw;
+    height: 42.7vw;
+    background-color: #BD1B1B;
+    visibility: hidden;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.error_stores_map.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.error_delivery_map {
+    z-index: 9999;
+    position: absolute;
+    width: 35vw;
+    height: 100%;
+    border: 0.15vw solid black;
+    border-radius: 0.5vw;
+    background-color: #BD1B1B;
+    visibility: hidden;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.error_delivery_map.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.error_pickup_map {
+    z-index: 9999;
+    position: absolute;
+    width: 35vw;
+    height: 100%;
+    border: 0.15vw solid black;
+    border-radius: 0.5vw;
+    background-color: #BD1B1B;
+    visibility: hidden;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.error_pickup_map.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.error_address_not_found {
+    position: absolute;
+    margin-left: 36.6vw;
+    width: min-content;
+    height: 2.5vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    padding-right: 0.75vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5vw;
+    white-space: nowrap;
+    font-family: "Kolibri Light", "Kolibri-Light", "Kolibri", sans-serif;
+    font-size: 0.9vw;
+    font-weight: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.error_address_not_found.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+#delivery-map {
+    width: 100%;
+    height: 100%;
+}
+
+.order_right {
+    margin-top: 3.5vw;
+    left: 0vw;
+    width: max-content;
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.order_info {
+    padding: 0vw 1vw 1.5vw 1vw;
+    border-radius: 0.5vw;
+    background: #BD1B1B;
+    height: min-content;
+}
+
+.order_right_order {
+    margin-bottom: 0.5vw;
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+}
+
+.order_right_products_row {
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+    white-space: nowrap
+}
+
+.order_right_row_gap {
+    margin-top: 0.75vw;
+}
+
+.order_right_row {
+    max-width: 37.5vw;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+}
+
+.order_right_pay_button {
+    z-index: 3;
+    margin-top: 1vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5vw 1vw 0.5vw 1vw;
+    border: 0.15vw solid black;
+    border-radius: 0.5vw;
+    background-color: #4B4B4B;
+    text-align: center;
+    font-size: 2.25vw;
+    font-family: "Jost", Arial;
+}
+
+.order_right_pay_button:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.order_right_pay_button:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
+.payment_errors {
+    position: relative;
+    margin-top: -7.25vw;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: max-content;
+}
+
+.error_pay_no_address{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min-content;
+    height: 2.5vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    padding-right: 0.75vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5vw;
+    white-space: nowrap;
+    font-family: "Kolibri Light", "Kolibri-Light", "Kolibri", sans-serif;
+    font-size: 0.9vw;
+    font-weight: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s;
+}
+
+.error_pay_no_address.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.pickup_text {
+    margin-bottom: 1vw;
+    margin-left: auto;
+    margin-right: auto;
+    height: 2.5vw;
+    width: min-content;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5vw;
+    border: 0.15vw solid black;
+    border-radius: 0.5vw;
+    background-color: #BD1B1B;
+    white-space: nowrap;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+#pickup-map {
+    width: 100%;
+    height: 100%;
+}
+
+.order_success_back {
+    position: relative;
+    margin-top: 0.75vw;
+    margin-bottom: 0.75vw;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 65vw;
+    min-width: 40vw;
+    background-image: url("./img/404_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 0.5vw 1vw 0.5vw 1vw;
+}
+
+.order_success_title {
+    font-size: 2.5vw;
+    font-family: "Jost", Arial;
+    text-align: center;
+    margin-bottom: 1vw;
+}
+
+.order_success_row {
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+}
+
+.order_success_actions {
+    display: flex;
+    margin-top: 4vw;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.order_success_actions_button {
+    display: block;
+    background-image: url("./img/header_button_click.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 0.5vw 2.75vw 0.5vw 2.75vw;
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.order_success_actions_button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}
+
+.order_success_actions_button:active {
+    transform: scale(1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+}

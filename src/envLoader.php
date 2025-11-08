@@ -20,5 +20,5 @@ function loadEnv($path) {
 }
 
 // Загружаем .env из той же папки
-loadEnv(__DIR__ . '/../.env');
+loadEnv(__DIR__ . '/../../.env');
 ?>

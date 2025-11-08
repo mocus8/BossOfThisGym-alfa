@@ -38,6 +38,7 @@ config.php
 database.php
 *.config.php
 .helpers.php
+.htaccess
 
 # Дампы БД
 *.sql

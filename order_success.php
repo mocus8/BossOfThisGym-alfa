@@ -163,7 +163,7 @@ require_once __DIR__ . '/src/getOrderData.php';
                         Спасибо за ваш заказ!
                     </div>
                     <div class="order_success_actions">
-                        <a href="order_history.php" class="order_success_actions_button">История заказов</a>
+                        <a href="my_orders.php" class="order_success_actions_button">История заказов</a>
                         <a href="index.php" class="order_success_actions_button">Продолжить покупки</a>
                     </div>
                 </div>

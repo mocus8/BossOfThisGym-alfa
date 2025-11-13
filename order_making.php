@@ -126,12 +126,12 @@ if ($cartCount === 0) {
                     <button class="order_right_pay_button" data-order-id="<?= $cartOrderId ?>">
                         Оплатить
                     </button>
-                    <div class="order_rigth_notification">
-                        <img class="error_modal_icon" src="img/error_modal_icon.png">
-                        Сайт работает в тестовом режиме, не используейте реальные карты. <br>
-                        Карты для теста: 5555555555554444 (успех), 5555555555554535 (ошибка)
-                    </div>
                     <div class="payment_errors">
+                        <div class="order_rigth_notification">
+                            <img class="error_modal_icon" src="img/error_modal_icon.png">
+                            Сайт работает в тестовом режиме, не используейте реальные карты. <br>
+                            Карты для теста: 5555555555554444 (успех), 5555555555554535 (ошибка)
+                        </div>
                         <div class="error_pay_no_address" id="error-pay-delivery-no-address">
                             <img class="error_modal_icon" src="img/error_modal_icon.png">
                             Укажите адрес доставки
@@ -175,12 +175,12 @@ if ($cartCount === 0) {
                     <button class="order_right_pay_button" data-order-id="<?= $cartOrderId ?>">
                         Оплатить
                     </button>
-                    <div class="order_rigth_notification">
-                        <img class="error_modal_icon" src="img/error_modal_icon.png">
-                        Сайт работает в тестовом режиме, не используейте реальные карты. <br>
-                        Карты для теста: 5555555555554444 (успех), 5555555555554535 (ошибка)
-                    </div>
                     <div class="payment_errors">
+                        <div class="order_rigth_notification">
+                            <img class="error_modal_icon" src="img/error_modal_icon.png">
+                            Сайт работает в тестовом режиме, не используейте реальные карты. <br>
+                            Карты для теста: 5555555555554444 (успех), 5555555555554535 (ошибка)
+                        </div>
                         <div class="error_pay_no_address" id="error-pay-pickup-no-address">
                             <img class="error_modal_icon" src="img/error_modal_icon.png">
                             Укажите магазин для самовывоза

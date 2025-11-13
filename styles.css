@@ -2062,8 +2062,9 @@ button {
 
 .order_rigth_notification {
     position: absolute;
-    top: 82%;
-    left: 51%;
+    margin-top: 22.5%;
+    left: 50%;
+    transform: translateX(-50%);
     width: min-content;
     height: 2.5vw;
     background-color: white;

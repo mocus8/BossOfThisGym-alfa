@@ -2,11 +2,14 @@
 session_start();
 
 require_once __DIR__ . '/helpers.php';
+require_once __DIR__ . '/secure/capchaVerification.php';
 
 // Получаем данные ИЗ POST
 $login = $_POST["login"];
 $password = $_POST["password"]; 
 $name = $_POST["name"];
+
+requireCaptcha();
 
 $cartSessionId = getCartSessionId();
 
@@ -23,6 +26,37 @@ if ($result->num_rows > 0) {
     echo json_encode([
         'success' => false,
         'message' => 'user_already_exists'
+    ]);
+    exit;
+}
+
+// 1.1. Проверяем данные из формы и верефицированный номер
+// a. Проверка SMS подтверждения
+if (!isset($_SESSION['verified_phone'])) {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'phone_not_verified'
+    ]);
+    exit;
+}
+
+// b. Проверка совпадения телефона
+if ($_SESSION['verified_phone'] !== normalize_phone($_POST['login'])) {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'phone_changed'
+    ]);
+    exit;
+}
+
+// c. Проверка времени
+if ((time() - $_SESSION['phone_verified_at']) > 3600) {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'code_expired'
     ]);
     exit;
 }

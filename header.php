@@ -38,20 +38,21 @@ if ($result) {
 }
 
 
-
 if ($idUser != '') {
     //ищем пользователя в бд
-    $sql = "SELECT * FROM `users` WHERE `id` = ('$idUser')";
-    $result = mysqli_query($connect, $sql);
-    $result = mysqli_fetch_all($result);
+    $stmt = $connect->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt->bind_param("i", $idUser);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
     $login;
     $password;
     $name;
     //вытаскиваем логин из бд
     foreach ($result as $item) {
-        $login = $item[1];
-        $password = $item[2];
-        $name = $item[3];
+        $login = $item['login'];
+        $password = $item['password'];
+        $name = $item['name'];
     }
 }
 ?>
@@ -193,6 +194,17 @@ if ($idUser != '') {
                     </span>
                     <input required class="registration_modal_input" type="tel" placeholder="(+7 XXX XXX XX XX)" name="login" autocomplete="tel">
                 </div>
+                <div class="registration_modal_sms_code_section">
+                    <div class="registration_modal_input_back short">
+                        <span class="registration_modal_input_text">
+                            Код подтверждения:
+                        </span>
+                        <input required class="registration_modal_input" type="text" placeholder="1234" name="sms_code" maxlength="4">
+                    </div>
+                    <button class="registration_modal_sms_code_button" id="sms-send-code">
+                        Отправить код
+                    </button>
+                </div>
                 <div class="registration_modal_input_back">
                     <span class="registration_modal_input_text">
                         Ваш пароль:
@@ -217,6 +229,12 @@ if ($idUser != '') {
                     <img class="error_modal_icon" src="img/error_modal_icon.png">
                     <div class="error_modal_text">
                         Пользователь уже зарегистрирован.
+                    </div>
+                </div>
+                <div class="incorrect_sms_code_back" id="incorrect-sms-code-modal">
+                    <img class="error_modal_icon" src="img/error_modal_icon.png">
+                    <div class="error_modal_text">
+                        Неверный код подтверждения.
                     </div>
                 </div>
                 <div class="incorrect_phone_number_back" id="incorrect-phone-number-modal">

@@ -547,7 +547,8 @@ button {
     top: 32.5%;
     transform: translateX(-50%);
     width: 50vw;
-    height: 23.5vw;
+    height: min-content;
+    padding-bottom: 2%;
     background-image: url("./img/contacts_back.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -580,6 +581,45 @@ button {
     background-size: 100% 100%;
     display: flex;
     align-items: center;
+}
+
+.registration_modal_input_back.short {
+    width: 25vw;
+    background-image: none;
+    background-color: #4B4B4B;
+    border: 0.1vw solid black;
+    border-radius: 0.5vw;
+}
+
+.registration_modal_sms_code_section {
+    width: 40vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.registration_modal_sms_code_button {
+    position: relative;
+    margin-top: 1%;
+    margin-left:auto;
+    width: max-content;
+    height: 2.9vw;
+    background-color: #4B4B4B;
+    border: 0.1vw solid black;
+    border-radius: 0.5vw;
+    white-space: nowrap;
+    font-size: 1.3vw;
+    font-family: "Jost", Arial;
+}
+
+.registration_modal_sms_code_button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.registration_modal_sms_code_button:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
 }
 
 .registration_modal_input_text {
@@ -696,6 +736,30 @@ button {
 }
 
 .user_already_exists_back.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.incorrect_sms_code_back {
+    position: absolute;
+    margin-top: 7.25vw;;
+    margin-left: 18vw;
+    width: 11.5vw;
+    height: 3vw;
+    background-color: white;
+    border-radius: 0.25vw;
+    border: 0.025vw solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5vw;
+    visibility: hidden;
+    opacity: 0;
+
+    transition: opacity .4s, visibility .4s;
+}
+
+.incorrect_sms_code_back.open {
     visibility: visible;
     opacity: 1;
 }

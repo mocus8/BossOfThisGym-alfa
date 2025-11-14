@@ -114,6 +114,56 @@ document.querySelector('.authorization_modal_form').addEventListener('submit', f
     });
 });
 
+document.getElementById('sms-send-code').addEventListener('click', async function(e) {
+    const phoneNumberInput = document.querySelector('.registration_modal_form input[name="login"]');
+    const smsCodeInput = document.querySelector('.registration_modal_form input[name="sms_code"]');
+    const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
+    const incorrectSmsCodeModal = document.getElementById('incorrect-sms-code-modal');
+
+    this.disabled = true;
+    const originalText = this.textContent;
+
+    try {
+        // Если кнопка в режиме "Отправить код"
+        if (this.textContent.includes('Отправить') || this.id === 'sms-send-code') {
+            this.textContent = 'Обработка...';
+
+            const response = await fetch('/src/smscSend.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: phoneValidation.formatted })
+            });
+            
+            if (!response.ok) throw new Error(`Ошибка ${response.status}`);
+            
+            this.textContent = 'Подтвердить код';
+            this.id = 'sms-verify-code';
+            
+        } 
+        // Если кнопка в режиме "Подтвердить код"  
+        else if (this.textContent.includes('Подтвердить') || this.id === 'sms-verify-code') {
+            this.textContent = 'Проверка...';
+            
+            const response = await fetch('/src/smscVerify.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: smsCodeInput.value })
+            });
+            
+            if (!response.ok) throw new Error(`Ошибка ${response.status}`);
+            
+            this.textContent = 'Успешно';
+        }
+        
+    } catch (error) {
+        incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = error.message;
+        incorrectSmsCodeModal.classList.add('open');
+        this.textContent = originalText;
+    } finally {
+        this.disabled = false;
+    }
+});
+
 document.querySelector('.registration_modal_form').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -123,6 +173,7 @@ document.querySelector('.registration_modal_form').addEventListener('submit', fu
     const userAlreadyExistsModal = document.getElementById('user-already-exists-modal');
     const mismatchModal = document.getElementById('password-mismatch-modal');
     const incorrectPhoneModal = document.getElementById('incorrect-phone-number-modal');
+    const incorrectSmsCodeModal = document.getElementById('incorrect-sms-code-modal');
 
     if (password !== confirmPassword) {
         mismatchModal.classList.add('open');
@@ -145,8 +196,22 @@ document.querySelector('.registration_modal_form').addEventListener('submit', fu
     .then(data => {
     if (data.success) {
         window.location.reload();
-    } else if (data.message === 'user_already_exists') {
-        userAlreadyExistsModal.classList.add('open');
+    } else {
+        const phoneErrors = {
+            'phone_not_verified': 'Телефон не подтвержден',
+            'phone_changed': 'Телефон был изменен после отправки кода', 
+            'code_expired': 'Код подтверждения устарел (более 1 часа)'
+        };
+        
+        if (data.message === 'user_already_exists') {
+            userAlreadyExistsModal.classList.add('open');
+        } else if (phoneErrors[data.message]) {
+            incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = phoneErrors[data.message];
+            incorrectSmsCodeModal.classList.add('open');
+        } else if (data.message) {
+            incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = data.message;
+            incorrectSmsCodeModal.classList.add('open');
+        }
     }
 })
     .catch(error => {
@@ -188,6 +253,7 @@ function closeErrorModal(ErrorModalId){
 
 document.addEventListener('click', function(e) {
     closeErrorModal("incorrect-phone-number-modal");
+    closeErrorModal("incorrect-sms-code-modal");
     closeErrorModal("password-mismatch-modal");
     closeErrorModal("uknown-user-modal");
     closeErrorModal("wrong-password-modal");

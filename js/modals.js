@@ -144,7 +144,7 @@ document.getElementById('sms-code').addEventListener('click', async function(e) 
 
 
             
-            //это для дебага!!!
+            //это для дебага, потом убрать!!!
             const result = await response.json();
             alert(`DEBUG: Код подтверждения: ${result.debug_code}`);
         
@@ -159,6 +159,9 @@ document.getElementById('sms-code').addEventListener('click', async function(e) 
         } else if (this.textContent.includes('Подтвердить')) {
             this.disabled = true;
             this.textContent = 'Обработка...';
+
+            //это для дебага, потом убрать!!!
+            console.log("smsCodeInput");
 
             // передаем код В POST для проверки
             const response = await fetch('/src/smscVerify.php', {

@@ -64,7 +64,7 @@ function validatePhoneNumber(phone) {
         cleaned = '+7' + cleaned.substring(1);
     }
 
-    const regex = /^\+7\d{10}$/;
+    const regex = /^\+79\d{9}$/;
 
     return {
         isValid: regex.test(cleaned),
@@ -116,8 +116,9 @@ document.querySelector('.authorization_modal_form').addEventListener('submit', f
 
 document.getElementById('sms-code').addEventListener('click', async function(e) {
     const phoneNumberInput = document.querySelector('.registration_modal_form').querySelector('input[name="login"]');
-    const smsCodeInput = document.querySelector('.registration_modal_form').querySelector('input[name="sms_code"]').value;
     const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
+    const smsCodeInput = document.querySelector('.registration_modal_form').querySelector('input[name="sms_code"]').value;
+    const incorrectPhoneModal = document.getElementById('incorrect-phone-number-modal');
     const incorrectSmsCodeModal = document.getElementById('incorrect-sms-code-modal');
     const originalText = this.textContent;
 
@@ -128,6 +129,8 @@ document.getElementById('sms-code').addEventListener('click', async function(e) 
 
             if (!phoneValidation.isValid) {
                 incorrectPhoneModal.classList.add('open');
+                this.textContent = originalText;
+                this.disabled = false;
                 return;
             }
 
@@ -160,9 +163,6 @@ document.getElementById('sms-code').addEventListener('click', async function(e) 
             this.disabled = true;
             this.textContent = 'Обработка...';
 
-            //это для дебага, потом убрать!!!
-            file_put_contents('debug.txt', smsCodeInput, FILE_APPEND);
-
             // передаем код В POST для проверки
             const response = await fetch('/src/smscVerify.php', {
                 method: 'POST',
@@ -191,10 +191,11 @@ document.getElementById('sms-code').addEventListener('click', async function(e) 
     }
 });
 
-document.querySelector('.registration_modal_form').addEventListener('submit', function(e) {
+document.querySelector('.registration_modal_form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const phoneNumberInput = this.querySelector('input[name="login"]');
+    const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
     const password = this.querySelector('input[name="password"]').value;
     const confirmPassword = this.querySelector('input[name="confirm-password"]').value;
     const userAlreadyExistsModal = document.getElementById('user-already-exists-modal');
@@ -207,7 +208,6 @@ document.querySelector('.registration_modal_form').addEventListener('submit', fu
         return; // ← ВАЖНО: выходим из функции
     }
 
-    const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
     if (!phoneValidation.isValid) {
         incorrectPhoneModal.classList.add('open');
         return; // ← ВАЖНО: выходим из функции
@@ -215,36 +215,33 @@ document.querySelector('.registration_modal_form').addEventListener('submit', fu
 
     // Этот код выполнится ТОЛЬКО если проверки прошли
     const formData = new FormData(this);
-    
-    fetchWithRetry(this.action, {
+
+    const result = await fetchWithRetry(this.action, {
         method: 'POST',
         body: formData
     })
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        } else {
-            const errorMessages = {
-                'user_already_exists': 'Пользователь уже зарегистрирован',
-                'phone_not_verified': 'Телефон не подтвержден',
-                'phone_changed': 'Телефон был изменен после отправки кода',
-                'code_expired': 'Код подтверждения устарел'
-            };
-            
-            if (data.message === 'user_already_exists') {
-                userAlreadyExistsModal.classList.add('open');
-            } else if (errorMessages[data.message]) {
-                incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = errorMessages[data.message];
-                incorrectSmsCodeModal.classList.add('open');
-            } else if (data.message) {
-                incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = data.message;
-                incorrectSmsCodeModal.classList.add('open');
-            }
+
+    if (!result.success) {
+        const errorMessages = {
+            'user_already_exists': 'Пользователь уже зарегистрирован',
+            'phone_not_verified': 'Телефон не подтвержден',
+            'phone_changed': 'Телефон был изменен после отправки кода',
+            'code_expired': 'Код подтверждения устарел',
+            'recaptcha_false': 'Не удалось пройти проверку на ботов.'
+        };
+        
+        if (result.message === 'user_already_exists') {
+            userAlreadyExistsModal.classList.add('open');
+        } else if (errorMessages[result.message]) {
+            incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = errorMessages[result.message];
+            incorrectSmsCodeModal.classList.add('open');
+        } else if (result.message) {
+            incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = result.message;
+            incorrectSmsCodeModal.classList.add('open');
         }
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-    });
+    } else {
+        window.location.reload();
+    }
 });
 
 
@@ -280,17 +277,20 @@ function closeErrorModal(ErrorModalId){
 }
 
 document.addEventListener('click', function(e) {
-    closeErrorModal("incorrect-phone-number-modal");
-    closeErrorModal("incorrect-sms-code-modal");
-    closeErrorModal("password-mismatch-modal");
-    closeErrorModal("uknown-user-modal");
-    closeErrorModal("wrong-password-modal");
-    closeErrorModal("user-already-exists-modal");
-    closeErrorModal("old-password-missmatch-modal");
-    closeErrorModal("modal-error-address-not-found");
-    closeErrorModal("modal-error-address-empty");
-    closeErrorModal("modal-error-address-timeout");
-    closeErrorModal("flash-payment-error");
+    // Закрываем модалки только если клик НЕ на кнопки (мб добавить еще элементы если все равно сразу закрывается)
+    if (!e.target.closest('button')) {
+        closeErrorModal("incorrect-phone-number-modal");
+        closeErrorModal("incorrect-sms-code-modal");
+        closeErrorModal("password-mismatch-modal");
+        closeErrorModal("uknown-user-modal");
+        closeErrorModal("wrong-password-modal");
+        closeErrorModal("user-already-exists-modal");
+        closeErrorModal("old-password-missmatch-modal");
+        closeErrorModal("modal-error-address-not-found");
+        closeErrorModal("modal-error-address-empty");
+        closeErrorModal("modal-error-address-timeout");
+        closeErrorModal("flash-payment-error");
+    }
 });
 
 function accountPasswordSwitch(nmbOfInpt) {

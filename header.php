@@ -201,7 +201,7 @@ if ($idUser != '') {
                         </span>
                         <input required class="registration_modal_input" type="text" placeholder="1234" name="sms_code" maxlength="4">
                     </div>
-                    <button class="registration_modal_sms_code_button" id="sms-code">
+                    <button class="registration_modal_sms_code_button" type="button" id="sms-code">
                         Отправить код
                     </button>
                 </div>

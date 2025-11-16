@@ -1,7 +1,5 @@
-<!-- тут проверяем капчу, если не проходит даём отрицательный ajax ответ -->
-
 <?php
-require_once __DIR__ . '/envLoader.php';
+require_once __DIR__ . '/../envLoader.php';
 
 function verifyRecaptcha($token) {
     $secret = getenv('GOOGLE_RECAPTCHA_SECRET_KEY');

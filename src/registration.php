@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/helpers.php';
-require_once __DIR__ . '/secure/capchaVerification.php';
+require_once DIR . '/helpers.php';
+require_once DIR . '/secure/captchaVerification.php';
 
 // Получаем данные ИЗ POST
 $login = $_POST["login"];

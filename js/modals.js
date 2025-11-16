@@ -145,13 +145,9 @@ document.getElementById('sms-code').addEventListener('click', async function(e) 
                 })
             });
 
-
-            
-            //это для дебага, потом убрать!!!
+            //это для теста без реальных sms, потом убрать!!!
             const result = await response.json();
-            alert(`DEBUG: Код подтверждения: ${result.debug_code}`);
-        
-
+            alert(`смски дорогие, пока так (но функционал для реальных смс уже есть) ) Код подтверждения: ${result.debug_code}`);
 
             if (!response.ok) {
                 throw new Error(`Ошибка ${response.status}! Попробуйте еще раз`);

@@ -28,7 +28,7 @@ function send_sms_verification($phone) {
         return [
             'success' => true,
             'test_mode' => $testMode,
-            'debug_code' => $code //это для дебага, потом убрать!!!
+            'debug_code' => $code //это для теста без реальных sms, потом убрать!!!
         ];
     } else {
         error_log("SMSC Error: $smsId for phone $phone");

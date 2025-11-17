@@ -12,7 +12,7 @@ script-src 'self' https://www.google.com https://www.gstatic.com https://gtmpx.c
 style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; \
 img-src 'self' data: https: https://*.maps.yandex.net; \
 font-src 'self' data: https:; \
-connect-src 'self' https://api-maps.yandex.ru https://*.maps.yandex.net https://cdn.jsdelivr.net https://suggestions.dadata.ru; \
+connect-src 'self' https://www.google.com https://www.gstatic.com https://api-maps.yandex.ru https://*.maps.yandex.net https://cdn.jsdelivr.net https://suggestions.dadata.ru; \
 frame-src 'self' https://www.google.com https://www.gstatic.com"
 
 Header always set X-Content-Type-Options "nosniff"

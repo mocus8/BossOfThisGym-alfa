@@ -100,7 +100,6 @@ try {
         'description' => 'Заказ №' . $orderId,
         'metadata' => ['orderId' => $orderId],
 
-        // тут поменять на правильную инфу
         'receipt' => [
             'customer' => [
                 'phone' => $order['login']

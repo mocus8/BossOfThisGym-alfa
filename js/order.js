@@ -94,7 +94,7 @@ document.querySelectorAll('.order_right_pay_button').forEach(button => {
         } else {
             try {
                 // ПЕРЕДАЕМ order_id В POST
-                const response = await fetch('../create_payment.php', {
+                const response = await fetch('/create_payment.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

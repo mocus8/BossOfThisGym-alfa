@@ -28,7 +28,8 @@ function send_sms_verification($phone) {
         return [
             'success' => true,
             'test_mode' => $testMode,
-            'debug_code' => $code //это для теста без реальных sms, потом убрать!!!
+            'debug_code' => $code, //это для теста без реальных sms, потом убрать!!!
+            'debug_phone' => $phone //это для теста без реальных sms, потом убрать!!!
         ];
     } else {
         error_log("SMSC Error: $smsId for phone $phone");
@@ -40,9 +41,6 @@ function send_sms_verification($phone) {
     }
 }
 
-/**
- * Проверка SMS кода
- */
 function verify_sms_code($inputCode) {
     if (!isset($_SESSION['sms_verification'])) {
         return ['success' => false, 'error' => 'Код не отправлялся'];
@@ -58,8 +56,18 @@ function verify_sms_code($inputCode) {
     
     // Проверяем попытки
     if ($data['attempts'] >= 5) {
+        // Устанавливаем блокировку
+        // $_SESSION['sms_blocked_until'] = time() + 1800; // 30 минут
+        $_SESSION['sms_blocked_until'] = time() + 45; // 45 секунд ДЛЯ ТЕСТА
+
         unset($_SESSION['sms_verification']);
-        return ['success' => false, 'error' => 'Превышено количество попыток'];
+        
+        // return ['success' => false, 'error' => 'Превышено количество попыток'];
+        return [
+            'success' => false, 
+            'error' => 'Превышено количество попыток', 
+            'blocked_until' => $_SESSION['sms_blocked_until']
+        ];
     }
     
     // Увеличиваем счетчик попыток
@@ -70,7 +78,6 @@ function verify_sms_code($inputCode) {
         $phone = $data['phone'];
         unset($_SESSION['sms_verification']);
 
-        //мб тут это убрать получится если где нужно передаётся везде и так
         $_SESSION['verified_phone'] = $phone;
         $_SESSION['phone_verified_at'] = time();
 

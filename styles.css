@@ -7,8 +7,41 @@
 }
 */
 
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: #000000 !important;
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: transparent !important;
+} */
+
+/* Переопределяем ВСЕ возможные состояния автозаполнения */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:autofill,
+input:autofill:hover, 
+input:autofill:focus,
+input:autofill:active {
+    -webkit-text-fill-color: #000000 !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    background-color: transparent !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 .hidden {
-    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    top: -9999px !important;
+    left: -9999px !important;
 }
 
 ::-webkit-scrollbar {
@@ -709,16 +742,6 @@ button {
 .registration_modal_blur.open {
     visibility: visible;
     opacity: 1;
-}
-
-.authorization_modal_input:-webkit-autofill,
-.authorization_modal_input:-webkit-autofill:hover, 
-.authorization_modal_input:-webkit-autofill:focus,
-.registration_modal_input:-webkit-autofill,
-.registration_modal_input:-webkit-autofill:hover,
-.registration_modal_input:-webkit-autofill:focus {
-    transition: background-color 5000s ease-in-out 0s;
-    background-color: transparent !important;
 }
 
 .user_already_exists_back {

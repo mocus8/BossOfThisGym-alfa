@@ -121,14 +121,141 @@ document.querySelector('.authorization_modal_form').addEventListener('submit', f
     });
 });
 
+let resendTimer = null;
+let resendTimeLeft = 0;
+
+//запуск таймера повторной отправки
+function startResendTimer(seconds = 60) {
+    const smsFirstCodeButton = document.getElementById('first-sms-code');
+    const smsRetryCodeButton = document.getElementById('retry-sms-code');
+
+    resendTimeLeft = seconds;
+    
+    // Блокируем кнопки сразу
+    smsFirstCodeButton.disabled = true;
+    smsRetryCodeButton.disabled = true;
+    
+    resendTimer = setInterval(() => {
+        resendTimeLeft--;
+        
+        const timerSpans = document.querySelectorAll(`[data-action="retry-sms-code-timer"]`);
+        
+        if (resendTimeLeft <= 0) {
+            clearInterval(resendTimer);
+            smsFirstCodeButton.disabled = false;
+            smsRetryCodeButton.disabled = false;
+            timerSpans.forEach(span => {
+                span.textContent = ``;
+            });
+        } else {
+            timerSpans.forEach(span => {
+                span.textContent = `(${resendTimeLeft}с)`;
+            });
+        }
+    }, 1000);
+}
+
+//остановка таймера повторной отправки
+function clearResendTimer() {
+    if (resendTimer) {
+        clearInterval(resendTimer);
+        resendTimer = null;
+    }
+}
+
+// переключение состояния формы
+function toggleSmsCodeState() {
+    const smsFirstCodeButton = document.getElementById('first-sms-code');
+    const smsRetryCodeButton = document.getElementById('retry-sms-code');
+    const phoneChangeButton = document.getElementById('phone-change');
+    const SmsCodeSection = document.querySelector('.registration_modal_form').querySelector('input[name="sms_code"]').closest('.registration_modal_input_back');
+    const phoneNumberSection = document.querySelector('.registration_modal_form').querySelector('input[name="login"]').closest('.registration_modal_input_back');
+
+    smsFirstCodeButton.classList.toggle('hidden');
+    smsRetryCodeButton.classList.toggle('hidden');
+    phoneChangeButton.classList.toggle('hidden');
+    SmsCodeSection.classList.toggle('hidden');
+    phoneNumberSection.classList.toggle('hidden');
+}
+
+// отправка кода
+async function sendSmsCode() {
+    const phoneNumberInput = document.querySelector('.registration_modal_form').querySelector('input[name="login"]');
+    const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
+    const incorrectPhoneModal = document.getElementById('incorrect-phone-number-modal');
+    const incorrectSmsCodeModal = document.getElementById('incorrect-sms-code-modal');
+    const smsFirstCodeButton = document.getElementById('first-sms-code');
+    const smsFirstCodeButtonInnerHTML = smsFirstCodeButton.innerHTML;
+    const smsRetryCodeButton = document.getElementById('retry-sms-code');
+    const smsRetryCodeButtonInnerHTML = smsRetryCodeButton.innerHTML;
+
+    if (!smsFirstCodeButton.classList.contains('hidden')) {
+        smsFirstCodeButton.disabled = true;
+        smsFirstCodeButton.innerHTML = 'Обработка...';
+    } else {
+        smsRetryCodeButton.disabled = true;
+        smsRetryCodeButton.innerHTML = 'Обработка...';
+    }
+
+    try {
+        if (!phoneValidation.isValid) {
+            incorrectPhoneModal.classList.add('open');
+            smsFirstCodeButton.innerHTML = smsFirstCodeButtonInnerHTML;
+            smsRetryCodeButton.innerHTML = smsRetryCodeButtonInnerHTML;
+            smsFirstCodeButton.disabled = false;
+            smsRetryCodeButton.disabled = false;
+            return;
+        }
+
+        // передаем телефон В POST для отправки смс
+        const response = await fetch('/src/smscSend.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                phone: phoneValidation.formatted
+            })
+        });
+    
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || result.message || `Ошибка ${response.status}! Попробуйте еще раз`);
+        }
+
+        if (!smsFirstCodeButton.classList.contains('hidden')) {
+            toggleSmsCodeState();
+        }
+
+        //это для теста без реальных sms, потом убрать!!!
+        alert(`смски дорогие, пока так (но функционал для реальных смс уже есть) Код подтверждения: ${result.debug_code}, был бы отправлен на номер ${result.debug_phone}`);
+
+        startResendTimer(20);
+    } catch (error) {
+        if (smsFirstCodeButton.classList.contains('hidden')) {
+            toggleSmsCodeState();
+        }
+
+        incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = error.message;
+        incorrectSmsCodeModal.classList.add('open');
+    } finally {
+        smsFirstCodeButton.innerHTML = smsFirstCodeButtonInnerHTML;
+        smsRetryCodeButton.innerHTML = smsRetryCodeButtonInnerHTML;
+    }
+}
+
+// подтверждение кода
 async function confirmSmsCode() {
     const smsCodeInput = document.querySelector('.registration_modal_form').querySelector('input[name="sms_code"]');
     const incorrectSmsCodeModal = document.getElementById('incorrect-sms-code-modal');
-    const smsCodeButton = document.getElementById('sms-code');
-    const originalText = smsCodeButton.textContent;
+    const smsFirstCodeButton = document.getElementById('first-sms-code');
+    const smsRetryCodeButton = document.getElementById('retry-sms-code');
+    const smsRetryCodeButtonInnerHTML = smsRetryCodeButton.innerHTML;
 
-    smsCodeButton.disabled = true;
-    smsCodeButton.textContent = 'Обработка...';
+    smsFirstCodeButton.disabled = true;
+    smsRetryCodeButton.disabled = true;
+    smsRetryCodeButton.textContent = 'Обработка...';
 
     try {
         const response = await fetch('/src/smscVerify.php', {
@@ -148,114 +275,30 @@ async function confirmSmsCode() {
         }
 
         clearResendTimer();
-        smsCodeButton.textContent = 'Успешно';
+
+        toggleSmsCodeState();
+
+        smsRetryCodeButton.innerHTML = smsRetryCodeButtonInnerHTML;
+        smsFirstCodeButton.textContent = 'Успешно';
     } catch (error) {
         incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = error.message;
         incorrectSmsCodeModal.classList.add('open');
 
-        smsCodeButton.textContent = originalText;
-        smsCodeButton.disabled = false;
+        smsRetryCodeButton.innerHTML = smsRetryCodeButtonInnerHTML;
     }
 }
 
-let resendTimer = null;
-let resendTimeLeft = 0;
+// первичная отправка кода
+document.getElementById('first-sms-code').addEventListener('click', sendSmsCode);
 
-function startResendTimer(seconds = 60) {
-    const smsButton = document.getElementById('sms-code');
-    resendTimeLeft = seconds;
-    
-    // Блокируем кнопку сразу
-    smsButton.disabled = true;
-    
-    resendTimer = setInterval(() => {
-        resendTimeLeft--;
-        
-        if (resendTimeLeft <= 0) {
-            // Таймер завершен
-            clearInterval(resendTimer);
-            smsButton.disabled = false;
-            smsButton.textContent = 'Отправить снова';
-        } else {
-            // Обновляем текст кнопки
-            smsButton.textContent = `Отправить снова\n (${resendTimeLeft}с)`;
-        }
-    }, 1000);
-}
+// отправить код снова
+document.getElementById('retry-sms-code').addEventListener('click', sendSmsCode);
 
-//запуск таймера повторной отправки
-function toggleSmsCodeState() {
-    const phoneChangeButton = document.getElementById('phone-change');
-    const SmsCodeSection = document.querySelector('.registration_modal_form').querySelector('input[name="sms_code"]').closest('.registration_modal_input_back');
-    const phoneNumberSection = document.querySelector('.registration_modal_form').querySelector('input[name="login"]').closest('.registration_modal_input_back');
-
-    phoneChangeButton.classList.toggle('hidden');
-    SmsCodeSection.classList.toggle('hidden');
-    phoneNumberSection.classList.toggle('hidden');
-}
-
-//остановка таймера повторной отправки
-function clearResendTimer() {
-    if (resendTimer) {
-        clearInterval(resendTimer);
-        resendTimer = null;
-    }
-    
-    const smsButton = document.getElementById('sms-code');
-    smsButton.disabled = false;
-    smsButton.textContent = 'Получить код';
-}
-
-// отправка кода
-document.getElementById('sms-code').addEventListener('click', async function(e) {
-    const phoneNumberInput = document.querySelector('.registration_modal_form').querySelector('input[name="login"]');
-    const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
-    const incorrectPhoneModal = document.getElementById('incorrect-phone-number-modal');
-    const incorrectSmsCodeModal = document.getElementById('incorrect-sms-code-modal');
-    const originalText = this.textContent;
-
-    try {
-        this.disabled = true;
-        this.textContent = 'Обработка...';
-
-        if (!phoneValidation.isValid) {
-            incorrectPhoneModal.classList.add('open');
-            this.textContent = originalText;
-            this.disabled = false;
-            return;
-        }
-
-        if (originalText.includes('Получить')) {
-            toggleSmsCodeState();
-        }
-
-        // передаем телефон В POST для отправки смс
-        const response = await fetch('/src/smscSend.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                phone: phoneValidation.formatted
-            })
-        });
-
-        //это для теста без реальных sms, потом убрать!!!
-        const result = await response.json();
-        alert(`смски дорогие, пока так (но функционал для реальных смс уже есть) ) Код подтверждения: ${result.debug_code}`);
-
-        if (!response.ok) {
-            throw new Error(`Ошибка ${response.status}! Попробуйте еще раз`);
-        }
-
-        startResendTimer(20);
-    } catch (error) {
-        incorrectSmsCodeModal.classList.add('open');
-        incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = error.message;
-
-        this.textContent = originalText;
-        this.disabled = false;
-    }
+// измеить телефон
+document.getElementById('phone-change').addEventListener('click', async function(e) {
+    toggleSmsCodeState();
+    // isPhoneVerified = false; // Сбрасываем подтверждение
+    // document.querySelector('input[name="sms_code"]').value = ''; // Очищаем код
 });
 
 // Обработчик изменения ввода
@@ -266,7 +309,7 @@ document.querySelector('input[name="sms_code"]').addEventListener('input', funct
     }
 });
 
-// Обработчик нажатия клавиш  
+// Обработчик нажатия enter
 document.querySelector('input[name="sms_code"]').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
         e.preventDefault();

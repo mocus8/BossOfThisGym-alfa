@@ -52,7 +52,7 @@ if ($_SESSION['verified_phone'] !== $_POST['login']) {
 }
 
 // c. Проверка времени
-if ((time() - $_SESSION['phone_verified_at']) > 3600) {
+if ((time() - $_SESSION['phone_verified_at']) > 1800) {
     header('Content-Type: application/json');
     echo json_encode([
         'success' => false,
@@ -88,6 +88,8 @@ if ($stmt->execute()) {
     echo json_encode([
         'success' => true
     ]);
+
+    unset($_SESSION['sms_verification']);
 } else {
     header('Content-Type: application/json');
     echo json_encode([

@@ -53,9 +53,13 @@ function verify_sms_code($inputCode) {
         unset($_SESSION['sms_verification']);
         return ['success' => false, 'error' => 'Код устарел'];
     }
+
+    // увеличиваем счетчик попыток
+    $_SESSION['sms_verification']['attempts']++;
+    $currentAttempts = $_SESSION['sms_verification']['attempts'];
     
     // Проверяем попытки
-    if ($data['attempts'] >= 5) {
+    if ($currentAttempts >= 5) {
         // Устанавливаем блокировку
         // $_SESSION['sms_blocked_until'] = time() + 1800; // 30 минут
         $_SESSION['sms_blocked_until'] = time() + 45; // 45 секунд ДЛЯ ТЕСТА
@@ -65,13 +69,10 @@ function verify_sms_code($inputCode) {
         // return ['success' => false, 'error' => 'Превышено количество попыток'];
         return [
             'success' => false, 
-            'error' => 'Превышено количество попыток', 
+            'error' => 'blocked', 
             'blocked_until' => $_SESSION['sms_blocked_until']
         ];
     }
-    
-    // Увеличиваем счетчик попыток
-    $_SESSION['sms_verification']['attempts']++;
     
     // Проверяем код
     if ($data['code'] == $inputCode) {
@@ -83,7 +84,7 @@ function verify_sms_code($inputCode) {
 
         return ['success' => true, 'phone' => $phone];
     } else {
-        return ['success' => false, 'error' => 'Неверный код'];
+        return ['success' => false, 'error' => 'Неверный код. Осталось попыток: ' . (5 - $currentAttempts)];
     }
 }
 ?>

@@ -214,6 +214,39 @@ async function isAttemptsBlocked() {
     }
 }
 
+// проверка наличия пользователя
+async function isUserAlreadyExist() {
+    const userAlreadyExistsModal = document.getElementById('user-already-exists-modal');
+    
+    const phoneNumberInput = document.querySelector('.registration_modal_form').querySelector('input[name="login"]');
+    const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
+    
+    try {
+        const response = await fetch('/src/isUserAlreadyExist.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                login: phoneValidation.formatted
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            return true;
+        } else {
+            userAlreadyExistsModal.classList.add('open');
+
+            return false;
+        }
+    } catch (error) {
+        incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = `Ошибка проверки блокировки`;
+        return false;
+    }
+}
+
 // переключение состояния формы
 function toggleSmsCodeState() {
     const smsFirstCodeButton = document.getElementById('first-sms-code');
@@ -234,6 +267,10 @@ function toggleSmsCodeState() {
 // отправка кода
 async function sendSmsCode() {
     if (await isAttemptsBlocked()) {
+        return;
+    }
+
+    if (await isUserAlreadyExist()) {
         return;
     }
 

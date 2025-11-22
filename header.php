@@ -225,7 +225,7 @@ if ($idUser != '') {
                     <button class="registration_modal_button" type="button" id="close-registration-modal">
                         Закрыть
                     </button>
-                    <button class="registration_modal_button" type="submit">
+                    <button class="registration_modal_button" type="submit" id="submit-registration">
                         Зарегистрироваться
                     </button>
                 </div>

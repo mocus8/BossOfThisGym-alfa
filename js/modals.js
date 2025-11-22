@@ -446,10 +446,15 @@ document.querySelector('.registration_modal_form').addEventListener('submit', as
     }
 
     const token = await getRecaptchaToken(this);
+
     const phoneNumberInput = this.querySelector('input[name="login"]');
     const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
+
     const password = this.querySelector('input[name="password"]').value;
     const confirmPassword = this.querySelector('input[name="confirm-password"]').value;
+    
+    const submitRegistrtionButton = document.getElementById('submit-registration');
+
     const userAlreadyExistsModal = document.getElementById('user-already-exists-modal');
     const mismatchModal = document.getElementById('password-mismatch-modal');
     const incorrectPhoneModal = document.getElementById('incorrect-phone-number-modal');

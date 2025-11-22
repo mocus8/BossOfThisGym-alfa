@@ -326,6 +326,8 @@ async function confirmSmsCode() {
     const smsRetryCodeButtonText = smsRetryCodeButton.querySelector('.retry_sms_code_btn_text');
     const smsRetryCodeButtonTextOrgnl = smsRetryCodeButtonText.textContent;
 
+    const phoneNumberInput = document.querySelector('.registration_modal_form').querySelector('input[name="login"]');
+
     smsFirstCodeButton.disabled = true;
     smsRetryCodeButton.disabled = true;
     smsRetryCodeButtonText.textContent = 'Обработка...';
@@ -355,6 +357,8 @@ async function confirmSmsCode() {
         }
 
         clearResendTimer();
+
+        phoneNumberInput.disabled = true;
 
         toggleSmsCodeState();
         

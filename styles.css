@@ -800,6 +800,7 @@ button {
     background-color: white;
     border-radius: 0.25vw;
     border: 0.025vw solid black;
+    padding: 0 0.25vw 0 0.25vw;
     display: flex;
     flex-direction: row;
     align-items: center;

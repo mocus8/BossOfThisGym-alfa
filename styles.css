@@ -388,6 +388,64 @@ button {
     transition: transform 0.05s ease
 }
 
+.header_modal {
+    z-index: 9999;
+    position: fixed;
+    right: 5%;
+    top: 5%;
+    padding: 1vw 3vw 1.5vw 3vw;
+    background-image: url("./img/contacts_back.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+    filter: drop-shadow(1vw 1vw 1.6vw rgba(0, 0, 0, 0.75));
+}
+
+.header_modal_top {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+    justify-content: center;
+}
+
+.header_modal_icon {
+    width: 3vw;
+    height: 3vw;
+}
+
+.header_modal_text {
+    font-size: 1.75vw;
+    font-family: "Jost", Arial;
+}
+
+.header_modal_progress {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: 0.75vw;
+    border-radius: 0.25vw;
+    border: 0.15vw solid black;
+}
+
+.header_modal_text_progress_fill {
+    width: 100%;
+    height: 0.75vw;
+    background-color: black;
+    background-image: linear-gradient(
+        45deg, 
+        rgba(255, 255, 255, 0.1) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 255, 255, 0.1) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    background-size: 20px 20px;
+}
+
 .authorization_modal_blur {
     z-index: 999;
     position: fixed;
@@ -402,7 +460,7 @@ button {
 }
 
 .authorization_modal {
-    z-index: 9999;
+    z-index: 9998;
     position: fixed;
     left: 50%;
     top: 32.5%;
@@ -578,7 +636,7 @@ button {
 }
 
 .registration_modal {
-    z-index: 9999;
+    z-index: 9998;
     position: fixed;
     left: 50%;
     top: 32.5%;
@@ -846,7 +904,7 @@ button {
 }
 
 .account_edit_modal {
-    z-index: 9999;
+    z-index: 9998;
     position: fixed;
     left: 50%;
     top: 36%;
@@ -882,7 +940,7 @@ button {
 }
 
 .account_delete_modal {
-    z-index: 9999;
+    z-index: 9998;
     position: fixed;
     left: 50%;
     top: 45%;
@@ -2009,7 +2067,7 @@ button {
 }
 
 .error_delivery_map {
-    z-index: 9999;
+    z-index: 9998;
     position: absolute;
     width: 35vw;
     height: 100%;
@@ -2033,7 +2091,7 @@ button {
 }
 
 .error_pickup_map {
-    z-index: 9999;
+    z-index: 9998;
     position: absolute;
     width: 35vw;
     height: 100%;

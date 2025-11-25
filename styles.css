@@ -403,6 +403,26 @@ button {
     filter: drop-shadow(1vw 1vw 1.6vw rgba(0, 0, 0, 0.75));
 }
 
+.header_modal_close_btn {
+    position: absolute;
+    top: 0.05vw;
+    right: 0.75vw;
+    font-size: 1.5vw;
+    font-family: "Jost", Arial;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.header_modal_close_btn:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0.2vw 0.2vw 0.4vw rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+}
+
+.header_modal_close_btn:active {
+    transform: scale(1);
+    transition: transform 0.05s ease
+}
+
 .header_modal_top {
     display: flex;
     flex-direction: row;

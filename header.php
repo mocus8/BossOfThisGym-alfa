@@ -174,10 +174,11 @@ if ($idUser != '') {
     <?php
         }
     ?>
-    <div class="header_modal hidden" id="header-modal">
+    <div class="header_modal" id="header-modal">
+        <button class="header_modal_close_btn">✕</button>
         <div class="header_modal_top">
             <img class="header_modal_icon"src="img/inf.png">
-            <div class="header_modal_text" id="header-modal-text"></div>
+            <div class="header_modal_text" id="header-modal-text">тестовый текст</div>
         </div>
         <div class="header_modal_progress">
             <div class="header_modal_text_progress_fill" id="header-modal-progress-fill"></div>

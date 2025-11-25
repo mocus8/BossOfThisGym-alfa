@@ -97,6 +97,11 @@ async function getRecaptchaToken(form) {
     return await grecaptcha.execute(siteKey, {action: 'submit'});
 }
 
+// Открытие универсальной модалки в хедере с текстом
+function openHeaderModal(innerText) {
+    
+}
+
 document.querySelector('.authorization_modal_form').addEventListener('submit', function(e) {
     //предотвращаем стандартную отправку формы
     e.preventDefault();

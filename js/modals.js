@@ -100,7 +100,6 @@ async function getRecaptchaToken(form) {
 // крутой объект для универсальной модалки в хедере с текстом
 const HeaderModal = (function() {
     let closeTimer = null;
-    let progressTimer = null;
     let modal, text, progress, closeBtn;
 
     function init() {
@@ -123,34 +122,27 @@ const HeaderModal = (function() {
         close();
 
         text.textContent = innerText;
-        progress.style.width = '100%';
         modal.classList.remove("hidden");
 
+        progress.classList.remove("shrinking");
+        // Принудительный reflow, гарантируем что анимация перезапуститься
+        void progress.offsetWidth;
+        progress.classList.add("shrinking");
+
        closeTimer = setTimeout(close, 5000);
-        
-        let width = 100;
-        progressTimer = setInterval(() => {    // setInterval работает бесконечно, каждый заданный промежуток времени, нужно останавливать в конце
-            width -= 1;
-            progress.style.width = width + '%';
-            
-            if (width <= 0) {
-                clearInterval(progressTimer);
-            }
-        }, 50);
     }
 
     function close() {
         if (!modal) return;
 
         modal.classList.add("hidden");
+        progress.classList.remove("shrinking");
 
         if(text) text.textContent = '';
 
         if (closeTimer) clearTimeout(closeTimer);
-        if (progressTimer) clearInterval(progressTimer);
 
         closeTimer = null;
-        progressTimer = null;
     }
 
     // Автоинициализация при загрузке
@@ -399,6 +391,8 @@ async function sendSmsCode() {
 
         //это для теста без реальных sms, потом убрать!!!
         alert(`смски дорогие, пока так (но функционал для реальных смс уже есть) Код подтверждения: ${result.debug_code}, был бы отправлен на номер ${result.debug_phone}`);
+
+        HeaderModal.open('SMS-код был отправлен на указанный номер');
 
         startResendTimer(30);
     } catch (error) {

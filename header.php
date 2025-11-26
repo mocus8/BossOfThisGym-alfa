@@ -174,7 +174,7 @@ if ($idUser != '') {
     <?php
         }
     ?>
-    <div class="header_modal" id="header-modal">
+    <div class="header_modal hidden" id="header-modal">
         <button class="header_modal_close_btn" id="header-modal-close">✕</button>
         <div class="header_modal_top">
             <img class="header_modal_icon"src="img/inf.png">

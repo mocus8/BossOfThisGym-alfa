@@ -132,6 +132,11 @@ button {
     100% { transform: rotate(360deg); }
 }
 
+@keyframes progressShrink {
+    0% { width: 100%; }
+    100% { width: 0%; }
+}
+
 .desktop {
     width: 100%;
     height: 100vh;
@@ -464,6 +469,10 @@ button {
         transparent
     );
     background-size: 20px 20px;
+}
+
+.header_modal_text_progress_fill.shrinking {
+    animation: progressShrink 5s linear forwards;
 }
 
 .authorization_modal_blur {

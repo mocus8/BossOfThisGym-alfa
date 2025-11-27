@@ -514,10 +514,11 @@ document.querySelector('.registration_modal_form').addEventListener('submit', as
             throw new Error('incorrect_phone');
         }
 
-        phoneNumberInput.value = phoneValidation.formatted;
-
         const formData = new FormData(this);
+        formData.set('login', phoneValidation.formatted);
         formData.append('recaptcha_response', token);
+
+        console.log('Отправляется:', phoneValidation.formatted);
 
         const result = await fetchWithRetry(this.action, {
             method: 'POST',
@@ -572,10 +573,11 @@ document.querySelector('.authorization_modal_form').addEventListener('submit', f
         incorrectPhoneModal.classList.add('open');
         return;
     }
-
-    phoneNumberInput.value = phoneValidation.formatted;
     
     const formData = new FormData(this);
+    formData.set('login', phoneValidation.formatted);
+
+    console.log('Отправляется:', phoneValidation.formatted);
     
     fetchWithRetry(this.action, {
         method: 'POST',

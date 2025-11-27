@@ -128,10 +128,10 @@ if ($idUser != '') {
     <div class="header_search">
         <div class="header_search_click">
             <img class="header_search_icon" src="img/glass.png">
-            <span class="header_search_text">
+            <label for="header-search-input" class="header_search_text">
                 Поиск товаров:
-            </span>
-            <input type="text" id="header-search-input" placeholder="гриф для штанги ..." class="header_search_input">
+            </label>
+            <input type="search" id="header-search-input" name="q" placeholder="гриф для штанги ..." class="header_search_input" autocomplete="off">
         </div>
     </div>
     <?php

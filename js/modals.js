@@ -461,7 +461,7 @@ document.querySelector('input[name="sms_code"]').addEventListener('keydown', fun
     }
 });
 
-// Обработчик ввода (по 5 символам)
+// Обработчик ввода кода (по 5 символам)
 document.querySelector('input[name="sms_code"]').addEventListener('input', function(e) {
     this.value = this.value.replace(/\D/g, '');
     if (this.value.length === 5) {
@@ -477,6 +477,18 @@ document.addEventListener('DOMContentLoaded', function() {
         clearIncomplete: true,
         showMaskOnHover: false
     }).mask('input[name="login"][type="tel"]');
+});
+
+// Обработчик ввода имени
+document.querySelectorAll('input[name="name"]').forEach(input => {
+    input.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^а-яёА-ЯЁ\s\-]/g, '');
+    });
+});
+
+// Обработчик поиска товаров
+document.getElementById('header-search-input').addEventListener('input', function(e) {
+
 });
 
 // потдтверждение формы регистрации
@@ -517,8 +529,6 @@ document.querySelector('.registration_modal_form').addEventListener('submit', as
         const formData = new FormData(this);
         formData.set('login', phoneValidation.formatted);
         formData.append('recaptcha_response', token);
-
-        console.log('Отправляется:', phoneValidation.formatted);
 
         const result = await fetchWithRetry(this.action, {
             method: 'POST',
@@ -576,8 +586,6 @@ document.querySelector('.authorization_modal_form').addEventListener('submit', f
     
     const formData = new FormData(this);
     formData.set('login', phoneValidation.formatted);
-
-    console.log('Отправляется:', phoneValidation.formatted);
     
     fetchWithRetry(this.action, {
         method: 'POST',

@@ -191,8 +191,6 @@ if ($cartCount === 0) {
         </main>
         <?php require_once __DIR__ . '/footer.php'; ?>
     </div>
-    <script src="js/loader.js"></script>
-    <script defer src="js/modals.js"></script>
     <script defer src="js/maps.js"></script>
     <script defer src="js/order.js"></script>
 </body>

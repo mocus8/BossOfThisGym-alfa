@@ -201,7 +201,7 @@ if ($idUser != '') {
                         <span class="registration_modal_input_text">
                             Ваш телефон:
                         </span>
-                        <input required class="registration_modal_input" type="tel" placeholder="(+7 XXX XXX XX XX)" name="login" autocomplete="tel">
+                        <input required class="registration_modal_input" type="tel" placeholder="+7 (XXX) XXX-XX-XX" name="login" autocomplete="tel">
                     </div>
                     <div class="registration_modal_input_back short hidden">
                         <span class="registration_modal_input_text">
@@ -276,7 +276,7 @@ if ($idUser != '') {
                     <span class="authorization_modal_input_text">
                         Ваш телефон:
                     </span>
-                    <input required class="authorization_modal_input" type="tel" placeholder="(+7 XXX XXX XX XX)" name="login" autocomplete="tel">
+                    <input required class="authorization_modal_input" type="tel" placeholder="+7 (XXX) XXX-XX-XX" name="login" autocomplete="tel">
                 </div>
                 <div class="authorization_modal_input_back">
                     <span class="authorization_modal_input_text">
@@ -388,6 +388,10 @@ if ($idUser != '') {
             </div>
         </div>
     </div>
+    <script src="js/loader.js"></script>
+    <script defer src="https://www.google.com/recaptcha/api.js?render=<?= getenv('GOOGLE_RECAPTCHA_SITE_KEY') ?>"></script>
+    <script defer src="/js/inputmask.min.js"></script>
+    <script defer src="js/modals.js"></script>
 </header>
 
 

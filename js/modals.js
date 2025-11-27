@@ -53,42 +53,17 @@ setupModal("account-edit-modal", "open-account-editior-modal", "close-account-ed
 setupModal("account-delete-modal", "open-account-edit-modal", "close-account-delete-modal");
 setupModal("account-exit-modal", "open-account-exit-modal", "close-account-exit-modal");
 
+// функция очистки номера телефона
 function validatePhoneNumber(phone) {
     let cleaned = phone.replace(/[^\d+]/g, '');
 
-    if (cleaned.startsWith('8') && cleaned.length === 11) {
-        cleaned = '+7' + cleaned.substring(1);
-    }
-
-    if (cleaned.startsWith('7') && cleaned.length === 11) {
-        cleaned = '+7' + cleaned.substring(1);
-    }
-
-    const regex = /^\+79\d{9}$/;
+    const regex = /^\+7\d{10}$/;
 
     return {
         isValid: regex.test(cleaned),
         formatted: cleaned
     };
 }
-
-function FormValidatePhoneNumber(formClass) {
-    const form = document.querySelector(formClass);
-    if (!form) return;
-    
-    form.addEventListener('submit', function(e) {
-        const phoneNumberInput = this.querySelector('input[name="login"]');
-        if (!phoneNumberInput) return;
-        
-        const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
-         if (phoneValidation.isValid && phoneNumberInput.value !== phoneValidation.formatted) {
-            phoneNumberInput.value = phoneValidation.formatted;
-        }
-    });
-}
-
-FormValidatePhoneNumber('.authorization_modal_form');
-FormValidatePhoneNumber('.registration_modal_form');
 
 //получение токена капчи
 async function getRecaptchaToken(form) {
@@ -155,30 +130,6 @@ const HeaderModal = (function() {
     // возвращаем функции для открытия и закрытия
     return { open, close };
 })(); // () на конце выполняет сразу (для всех функций), и это исользуется все последующее разы
-
-document.querySelector('.authorization_modal_form').addEventListener('submit', function(e) {
-    //предотвращаем стандартную отправку формы
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    
-    fetchWithRetry(this.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        } else if (data.message === 'wrong_password') {
-            document.getElementById('wrong-password-modal').classList.add('open');
-        } else if (data.message === 'user_not_found') {
-            document.getElementById('uknown-user-modal').classList.add('open');
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-    });
-});
 
 // крутой объект через IIFE для управления SMS таймерами 
 const SmsTimerManager = (function() {
@@ -518,20 +469,17 @@ document.querySelector('input[name="sms_code"]').addEventListener('input', funct
     }
 });
 
-// обработчик ввода телефона
-document.querySelectorAll('input[name="login"]').forEach(input => {
-    input.addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^\d+]/g, '');
-        let value = this.value;
-        
-        if (value.startsWith('7')) {
-            console.log(value);
-        }
-    });
+// маска для номера телефона
+document.addEventListener('DOMContentLoaded', function() {
+    Inputmask({
+        mask: "+7 (999) 999-99-99",
+        placeholder: "_",
+        clearIncomplete: true,
+        showMaskOnHover: false
+    }).mask('input[name="login"][type="tel"]');
 });
 
-
-// потдтерждение формы регистрации
+// потдтверждение формы регистрации
 document.querySelector('.registration_modal_form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -565,6 +513,8 @@ document.querySelector('.registration_modal_form').addEventListener('submit', as
         if (!phoneValidation.isValid) {
             throw new Error('incorrect_phone');
         }
+
+        phoneNumberInput.value = phoneValidation.formatted;
 
         const formData = new FormData(this);
         formData.append('recaptcha_response', token);
@@ -611,69 +561,39 @@ document.querySelector('.registration_modal_form').addEventListener('submit', as
     }
 });
 
-// document.querySelector('.registration_modal_form').addEventListener('submit', async function(e) {
-//     e.preventDefault();
+// подтверждение формы авторизации
+document.querySelector('.authorization_modal_form').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-//     if (await isAttemptsBlocked()) {
-//         return;
-//     }
+    const phoneNumberInput = this.querySelector('input[name="login"]');
+    const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
 
-//     const token = await getRecaptchaToken(this);
+    if (!phoneValidation.isValid) {
+        incorrectPhoneModal.classList.add('open');
+        return;
+    }
 
-//     const phoneNumberInput = this.querySelector('input[name="login"]');
-//     const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
-
-//     const password = this.querySelector('input[name="password"]').value;
-//     const confirmPassword = this.querySelector('input[name="confirm-password"]').value;
+    phoneNumberInput.value = phoneValidation.formatted;
     
-//     const submitRegistrtionButton = document.getElementById('submit-registration');
-
-//     const userAlreadyExistsModal = document.getElementById('user-already-exists-modal');
-//     const mismatchModal = document.getElementById('password-mismatch-modal');
-//     const incorrectPhoneModal = document.getElementById('incorrect-phone-number-modal');
-//     const incorrectSmsCodeModal = document.getElementById('incorrect-sms-code-modal');
-
-//     if (password !== confirmPassword) {
-//         mismatchModal.classList.add('open');
-//         return; // ← ВАЖНО: выходим из функции
-//     }
-
-//     if (!phoneValidation.isValid) {
-//         incorrectPhoneModal.classList.add('open');
-//         return; // ← ВАЖНО: выходим из функции
-//     }
-
-//     // Этот код выполнится ТОЛЬКО если проверки прошли
-//     const formData = new FormData(this);
-//     formData.append('recaptcha_response', token);
-
-//     const result = await fetchWithRetry(this.action, {
-//         method: 'POST',
-//         body: formData
-//     })
-
-//     if (!result.success) {
-//         const errorMessages = {
-//             'user_already_exists': 'Пользователь уже зарегистрирован',
-//             'phone_not_verified': 'Телефон не подтвержден',
-//             'phone_changed': 'Телефон был изменен после подтверждения по sms',
-//             'code_expired': 'Код подтверждения устарел',
-//             'recaptcha_false': 'Не удалось пройти проверку на ботов.'
-//         };
-        
-//         if (result.message === 'user_already_exists') {
-//             userAlreadyExistsModal.classList.add('open');
-//         } else if (errorMessages[result.message]) {
-//             incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = errorMessages[result.message];
-//             incorrectSmsCodeModal.classList.add('open');
-//         } else if (result.message) {
-//             incorrectSmsCodeModal.querySelector('.error_modal_text').textContent = result.message;
-//             incorrectSmsCodeModal.classList.add('open');
-//         }
-//     } else {
-//         window.location.reload();
-//     }
-// });
+    const formData = new FormData(this);
+    
+    fetchWithRetry(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else if (data.message === 'wrong_password') {
+            document.getElementById('wrong-password-modal').classList.add('open');
+        } else if (data.message === 'user_not_found') {
+            document.getElementById('uknown-user-modal').classList.add('open');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+});
 
 //открытие ошибки о несовпадении старого пароля
 document.querySelector('.account_edit_modal .registration_modal_form').addEventListener('submit', function(e) {

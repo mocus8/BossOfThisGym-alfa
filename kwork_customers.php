@@ -49,8 +49,5 @@ require_once __DIR__ . '/src/envLoader.php';
             </main>
             <?php require_once __DIR__ . '/footer.php'; ?>
         </div>
-        <script src="js/loader.js"></script>
-        <script defer src="js/modals.js"></script>
-        <script defer src="https://www.google.com/recaptcha/api.js?render=<?= getenv('GOOGLE_RECAPTCHA_SITE_KEY') ?>"></script>
 	</body>
 </html>

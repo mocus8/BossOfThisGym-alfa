@@ -251,9 +251,6 @@ if (!isset($_SESSION['user']['id'])) {
                 </div>
             </div>
         </div>
-        <script src="js/loader.js"></script>
-        <script defer src="js/modals.js"></script>
         <script defer src="js/my_orders.js"></script>
-        <script defer src="https://www.google.com/recaptcha/api.js?render=<?= getenv('GOOGLE_RECAPTCHA_SITE_KEY') ?>"></script>
 	</body>
 </html>

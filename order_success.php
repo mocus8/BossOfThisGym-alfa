@@ -187,7 +187,5 @@ require_once __DIR__ . '/src/getOrderData.php';
             </main>
             <?php require_once __DIR__ . '/footer.php';?>
         </div>
-        <script src="js/loader.js"></script>
-        <script defer src="js/modals.js"></script>
 	</body>
 </html>

@@ -1125,8 +1125,6 @@ button {
 }
 
 .product {
-    /* width: 15.8vw;
-    height: 21vw; */
     width: 14vw;
     height: 21vw;
     background-image: url("./img/product_back.svg");

@@ -488,7 +488,9 @@ document.querySelectorAll('input[name="name"]').forEach(input => {
 
 // Обработчик поиска товаров
 document.getElementById('header-search-input').addEventListener('input', function(e) {
-
+    if (this.value != '') {
+        console.log("что то етсь")
+    }
 });
 
 // потдтверждение формы регистрации

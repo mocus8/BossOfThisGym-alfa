@@ -4,8 +4,9 @@ session_start();
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/secure/captchaVerification.php';
 
+// тут нужна еще проверка CSRF токенов и ограничение частоты запросов. это все через laravel можно сделать
+
 // Получаем данные ИЗ POST
-// тут нужно обрабатывать входящий телефон, сейчас этого нет
 $login = $_POST["login"];
 $password = $_POST["password"]; 
 $name = $_POST["name"];

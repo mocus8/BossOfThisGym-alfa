@@ -33,15 +33,6 @@ function initStoresMap(){
         center: [55.76, 37.64], 
         zoom: 10 
     });
-
-
-
-
-
-
-
-
-
     // Загружаем магазины из БД
     fetch('src/getStores.php')
     .then(response => response.json())
@@ -81,40 +72,6 @@ function initStoresMap(){
     .catch(error => {
         console.error('Ошибка загрузки магазинов:', error);
     });
-
-    // const stores = [
-    //     [55.666208, 37.816980, 'Москва, Ул. Головачёва, вл8с1<br><br>Время работы:<br>10:00 - 23:00 (будние дни)<br>10:00 - 21:00 (выходные и праздники)<br>'],
-    //     [55.846623, 37.600648, 'Москва, Ул. Станционная, 11<br><br>Время работы:<br>10:00 - 22:00 (будние дни)<br>10:00 - 21:00 (выходные и праздники)<br>'],
-    //     [56.345, 37.520, 'Дмитров, Историческая площадь, 11<br><br>Время работы:<br>10:00 - 23:00 (будние дни)<br>10:00 - 21:00 (выходные и праздники)<br>']
-    // ];
-    
-    // stores.forEach(store => {
-    //     const yandexMapsUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(store[2].replace(/<br>/g, ', '))}`;
-        
-    //     map.geoObjects.add(new ymaps.Placemark([store[0], store[1]], {
-    //         balloonContent: `
-    //             <div style="min-width: 250px; font-family: 'Jost', Arial; font-size: 16px; color: black;">
-    //                 <div style="margin-bottom: 15px;">
-    //                     ${store[2].replace(/<br>/g, '<br>')}
-    //                 </div>
-    //                 <div style="text-align: center;">
-    //                     <a href="${yandexMapsUrl}" 
-    //                     target="_blank" 
-    //                     style="display: inline-block; background: #4B4B4B; color: black; border: 0.15vw solid black; padding: 3% 5%; border-radius: 0.5vw;">
-    //                         Открыть в Картах
-    //                     </a>
-    //                 </div>
-    //             </div>
-    //         `
-    //     }, {
-    //         iconLayout: 'default#image',
-    //         iconImageHref: '/img/custom_map_pin.png',
-    //         iconImageSize: [60, 55],
-    //         iconImageOffset: [-20, -40]
-    //     }));
-    // });
-    
-    // map.setBounds(map.geoObjects.getBounds());
 }
 
 // Карта доставки

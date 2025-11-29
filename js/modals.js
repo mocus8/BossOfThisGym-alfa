@@ -513,17 +513,48 @@ document.querySelectorAll('input[name="name"]').forEach(input => {
 });
 
 // Обработчик поиска товаров
-document.getElementById('header-search-input').addEventListener('input', function(e) {
-    const headerSearchCancelButton  = document.getElementById('header-search-cancel-button');
-    headerSearchCancelButton.classList.toggle('hidden', !this.value);
+document.getElementById('header-search-input').addEventListener('input', (function() {
+    let searchTimeout;
 
-    if (this.value != '') {
-        console.log("что то есть")
-    }
-});
+    return async function(e) {
+        let query = this.value.trim();
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(async () => {
+            const headerSearchCancelButton  = document.getElementById('header-search-cancel-button');
+            const queryProductsContainer  = document.getElementById('query-products-container');
+
+            queryProductsContainer.classList.toggle('hidden', !query);
+            headerSearchCancelButton.classList.toggle('hidden', !query);
+
+            if (!query) return;
+        
+            try {
+                const response = await fetch(`/src/search.php?q=${encodeURIComponent(query)}`);
+        
+                if (!response.ok) {
+                    const errorData = await parseResponse(response);
+                    throw new Error(errorData.error);
+                }
+        
+                const queryProducts = await parseResponse(response);
+                // Тут нужно отрендерить товары в queryProductsContainer
+                console.log(queryProducts);
+        
+            } catch (error) {
+                // тут нужно ошибку переводить на понятный язык
+                console.log(error);
+        
+                HeaderModal.open('Ошибка поиска');
+            }
+        }, 300);
+    };
+})());
 
 // очистка поля ввода
 document.getElementById('header-search-cancel-button').addEventListener('click', function(e) {
+    const queryProductsContainer  = document.getElementById('query-products-container');
+    queryProductsContainer.classList.add("hidden");
+
     const headerSearchInput  = document.getElementById('header-search-input');
     headerSearchInput.value = '';
 

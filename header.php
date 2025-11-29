@@ -133,10 +133,15 @@ if ($idUser != '') {
             </label>
             <input type="search" id="header-search-input" name="q" placeholder="гриф для штанги ..." class="header_search_input" autocomplete="off" maxlength="150">
             <button class="header_search_cancel_button hidden" id="header-search-cancel-button">✕</button>
+            <div class="query_products_container hidden" id="query-products-container">
+                <div class="search_empty hidden" id="search-empty">
+                    Ничего не найдено
+                </div>
+            </div>
         </div>
     </div>
     <?php
-        if ($idUser == '') {
+    if ($idUser == '') {
     ?>
         <div class="header_account">
             <img class="header_account_icon" src="img/person.png">
@@ -148,7 +153,7 @@ if ($idUser != '') {
             </button>
         </div>
     <?php
-        } else {
+    } else {
     ?>
         <div class="header_account">
             <img class="header_account_icon" src="img/person.png">
@@ -173,7 +178,7 @@ if ($idUser != '') {
             </div>
         </div>
     <?php
-        }
+    }
     ?>
     <div class="header_modal hidden" id="header-modal">
         <button class="header_modal_close_btn" id="header-modal-close">✕</button>

@@ -23,8 +23,8 @@ $types = '';
 
 // условия каждого слова для поиска
 foreach ($words as $word) {
-    if (mb_strlen($word) >= 3) {
-        $baseWord = mb_substr($word, 0, -2);
+    if (mb_strlen($word) >= 2) {
+        $baseWord = (mb_strlen($word) >= 5) ? mb_substr($word, 0, -2) : $word;
         $conditions[] = "(prdct.name LIKE ? OR prdct.name LIKE ? OR prdct.description LIKE ? OR prdct.description LIKE ?)";
         $params[] = '%' . $word . '%';
         $params[] = '%' . $baseWord . '%';
@@ -48,11 +48,6 @@ if (!$connect) {
     echo json_encode(['error' => 'db_connection_failed']);
     exit;
 }
-
-// базовые параметры для релевантности
-$exactMatch = $query;
-$searchTermStart = $query . '%';
-$searchTerm = '%' . $query . '%';
 
 // Ищем в бд схожие названия
 $sql = "
@@ -79,13 +74,13 @@ $sql = "
             WHERE img2.product_id = prdct.product_id
         )
     WHERE " . implode(' OR ', $conditions) . "
-    
+    HAVING relevance > 0
     ORDER BY relevance DESC, prdct.name
 ";
-// HAVING relevance > 0
 
 // оформляем параметры
-array_unshift($params, $exactMatch, $searchTermStart, $searchTerm, $searchTerm);
+$caseParams = array_slice($params, 0, 4);
+$params = array_merge($caseParams, $params);
 $types = 'ssss' . $types;
 
 $stmt = $connect->prepare($sql);

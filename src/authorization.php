@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/helpers.php';
 
+header('Content-Type: application/json');
+
 // Получаем данные из формы авторизации методом POST
 $login = $_POST["login"];
 $password = $_POST["password"];
@@ -20,7 +22,6 @@ $result = $stmt->get_result();
 
 // Если пользователь с таким логином не найден
 if ($result->num_rows === 0) {
-    header('Content-Type: application/json');
     echo json_encode([
         'success' => false,
         'message' => 'user_not_found'
@@ -42,7 +43,6 @@ if (password_verify($password, $user['password'])) {
         'id' => $user['id'],
         'name' => $user['name']
     ];
-    header('Content-Type: application/json');
     echo json_encode([
         'success' => true,
     ]);

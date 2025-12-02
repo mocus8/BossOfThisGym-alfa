@@ -14,6 +14,11 @@ async function parseResponse(response) {
     }
     
     // Если не JSON - обрабатываем как текст
+
+    // дебаг
+    console.log('Content-Type:', contentType); // заголовок
+    console.log('Raw response:', text); // Что пришло на самом деле
+    
     throw new Error('Ошибка, сервер вернул некорректный ответ, попробуйте позже');
 }
 
@@ -682,7 +687,7 @@ document.querySelector('.authorization_modal_form').addEventListener('submit', f
     const phoneValidation = validatePhoneNumber(phoneNumberInput.value);
 
     if (!phoneValidation.isValid) {
-        incorrectPhoneModal.classList.add('open');
+        HeaderModal.open('Неправильный формат номера');
         return;
     }
     

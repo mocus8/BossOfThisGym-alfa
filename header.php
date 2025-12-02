@@ -196,7 +196,7 @@ if ($idUser != '') {
                     <span class="registration_modal_input_text">
                         Ваше имя и фамилия:
                     </span>
-                    <input required class="registration_modal_input" type="text" name="name" autocomplete="name" maxlength="25">
+                    <input required class="registration_modal_input" type="text" name="name" autocomplete="name" maxlength="30">
                 </div>
                 <div class="registration_modal_sms_code_section">
                     <div class="registration_modal_input_back short">
@@ -319,7 +319,7 @@ if ($idUser != '') {
                     <span class="registration_modal_input_text">
                         Ваше имя:
                     </span>
-                    <input required class="registration_modal_input" type="text" value="<?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>" name="name" autocomplete="name" maxlength="25">
+                    <input required class="registration_modal_input" type="text" value="<?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>" name="name" autocomplete="name" maxlength="30">
                 </div>
                 <div class="registration_modal_input_back">
                     <span class="registration_modal_input_text">

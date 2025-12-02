@@ -1,9 +1,10 @@
 <?php
+session_start();
 
 //подключаем файл хелперс с нужной функцией
 require_once __DIR__ . '/helpers.php';
 
-session_start();
+header('Content-Type: application/json');
 
 $connect = getDB();
 
@@ -32,7 +33,6 @@ if (!$user) {
 
 if (!password_verify($oldPassword, $user['password'])) {
     //выводим сообщение что пароль не верный
-    header('Content-Type: application/json');
     echo json_encode([
         'success' => false,
         'message' => 'old_password_missmatch'

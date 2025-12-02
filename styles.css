@@ -378,7 +378,8 @@ button {
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
-    overflow-x: ellipsis;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
     font-size: 1.2vw;
     font-family: "Jost", Arial;
     text-align: center;

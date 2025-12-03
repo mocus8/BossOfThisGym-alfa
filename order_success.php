@@ -25,7 +25,7 @@ try {
     }
 
     // получаем из бд данные о заказе (id заказа, статус и время оплаты)
-    $stmt = $connect->prepare("SELECT order_id, status, paid_at FROM orders WHERE order_id = ? AND user_id = ?");
+    $stmt = $connect->prepare("SELECT order_id, delivery_cost, status, paid_at FROM orders WHERE order_id = ? AND user_id = ?");
     if (!$stmt) {
         throw new Exception('DATABASE_OPERATIONS_FAILED');
     }
@@ -36,6 +36,7 @@ try {
     $result = $stmt->get_result();
     $order = $result->fetch_assoc();
     $paidAt = $order['paid_at'];
+    $deliveryCost = $order['delivery_cost'];
 
     // Заказ вообще не существует
     if (!$order) {
@@ -138,7 +139,7 @@ require_once __DIR__ . '/src/getOrderData.php';
                     ?>
                     <div class="order_right_row_gap"></div>
                     <div class="order_success_row">
-                        Итоговая стоимость: <?= $orderTotalPrice ?> ₽
+                        Итоговая стоимость: <?= $orderTotalPrice + $deliveryCost?> ₽
                     </div>
                     <div class="order_right_row_gap"></div>
                     <div class="order_success_row">
@@ -159,6 +160,9 @@ require_once __DIR__ . '/src/getOrderData.php';
                     <?php
                     } else if ($orderDetails['delivery_type'] === 'delivery' && $orderDetails['delivery_address']) { 
                     ?>
+                        <div class="order_success_row">
+                            Стоимость доставки: <?= htmlspecialchars($deliveryCost) ?>
+                        </div>
                         <div class="order_success_row">
                             Адрес доставки: <?= htmlspecialchars($orderDetails['delivery_address']) ?>
                         </div>

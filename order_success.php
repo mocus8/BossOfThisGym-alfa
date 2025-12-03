@@ -161,7 +161,7 @@ require_once __DIR__ . '/src/getOrderData.php';
                     } else if ($orderDetails['delivery_type'] === 'delivery' && $orderDetails['delivery_address']) { 
                     ?>
                         <div class="order_success_row">
-                            Стоимость доставки: <?= htmlspecialchars(number_format($deliveryCost, 2, '.', '')) ?>
+                            Стоимость доставки: <?= htmlspecialchars(number_format($deliveryCost, 2, '.', '')) ?> ₽
                         </div>
                         <div class="order_success_row">
                             Адрес доставки: <?= htmlspecialchars($orderDetails['delivery_address']) ?>

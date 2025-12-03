@@ -106,17 +106,16 @@ if ($cartCount === 0) {
                         ?>
                         <div class="order_right_row_gap"></div>
                         <div class="order_right_row">Количество товаров: <?= $cartCount ?></div>
-                        <div class="order_right_row">Стоимость всех товаров: <?= $cartTotalPrice ?></div>
+                        <div class="order_right_row">Стоимость всех товаров: <?= $cartTotalPrice ?> ₽</div>
                         <?php
                         if ($cartTotalPrice < 5000) {
-                            $cartTotalPrice += 750
                         ?> 
                             <div class="order_right_row">Стоимость доставки: 750 ₽ (бесплатно при заказе от 5000 ₽)</div>
-                            <div class="order_right_row">Итого: <?= $cartTotalPrice?></div>
+                            <div class="order_right_row">Итого: <?= $cartTotalPrice + 750?> ₽</div>
                         <?php
                         } else {
                         ?>
-                            <div class="order_right_row">Стоимость доставки: 0 ₽</div>
+                            <div class="order_right_row">Стоимость доставки: 0 ₽ (бесплатно при заказе от 5000 ₽)</div>
                             <div class="order_right_row">Итого: <?= $cartTotalPrice?></div>
                         <?php
                         }
@@ -168,8 +167,8 @@ if ($cartCount === 0) {
                         ?>
                         <div class="order_right_row_gap"></div>
                         <div class="order_right_row">Количество товаров: <?= $cartCount ?></div>
-                        <div class="order_right_row">Стоимость всех товаров: <?= $cartTotalPrice ?></div>
-                        <div class="order_right_row">Итого: <?= $cartTotalPrice ?></div>
+                        <div class="order_right_row">Стоимость всех товаров: <?= $cartTotalPrice ?> ₽</div>
+                        <div class="order_right_row">Итого: <?= $cartTotalPrice ?> ₽</div>
                         <div class="order_right_row">Адрес магазина для самовывоза:<br><span id="order-right-pickup-address">не указан</span></div>
                     </div>
                     <button class="order_right_pay_button" data-order-id="<?= $cartOrderId ?>">

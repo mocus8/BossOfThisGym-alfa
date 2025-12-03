@@ -1,4 +1,5 @@
 <?php
+// тут не хватает многих проверок для продакшена, потом зарефакторить с остальными api
 session_start();
 require_once __DIR__ . '/helpers.php';
 header('Content-Type: application/json');
@@ -21,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Получаем текущий заказ
-    $stmt = $connect->prepare("SELECT order_id FROM orders WHERE user_id = ? AND status = 'cart'");
+    $stmt = $connect->prepare("SELECT order_id, total_price, delivery_cost FROM orders WHERE user_id = ? AND status = 'cart'");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -43,17 +44,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($existing_address) {
                 $address_id = $existing_address['id'];
             } else {
-                //ВОТ ЗДЕСЬ НУЖНО БУДЕТ ДОБАВИТЬ postal_code
                 $stmt = $connect->prepare("INSERT INTO delivery_addresses (user_id, address_line, postal_code) VALUES (?, ?, ?)");
                 $stmt->bind_param("iss", $user_id, $address, $postalCode);
                 $stmt->execute();
                 $address_id = $connect->insert_id;
             }
-            
+
             // Обновляем заказ: активируем доставку, деактивируем самовывоз
-            $stmt = $connect->prepare("UPDATE orders SET delivery_type = 'delivery', delivery_address_id = ?, store_id = NULL WHERE order_id = ?");
-            $stmt->bind_param("ii", $address_id, $order_id);
-            
+            $products_price = $order['total_price'] - $order['delivery_cost'];
+        
+            if ($products_price < 5000) {
+                $total_price = $products_price + 750;
+                
+                $stmt = $connect->prepare("UPDATE orders SET total_price = ?, delivery_type = 'delivery', delivery_cost = '750.00', delivery_address_id = ?, store_id = NULL WHERE order_id = ?");
+                $stmt->bind_param("dii", $total_price, $address_id, $order_id);
+            } else {
+                $stmt = $connect->prepare("UPDATE orders SET total_price = ?, delivery_type = 'delivery', delivery_cost = '0.00', delivery_address_id = ?, store_id = NULL WHERE order_id = ?");
+                $stmt->bind_param("dii", $products_price, $address_id, $order_id);
+            }
         } else {
         // САМОВЫВОЗ
             $store_id = $data['store_id'] ?? 0;
@@ -76,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Обновляем заказ: активируем самовывоз, деактивируем доставку
-            $stmt = $connect->prepare("UPDATE orders SET delivery_type = 'pickup', delivery_address_id = NULL, store_id = ? WHERE order_id = ?");
+            $stmt = $connect->prepare("UPDATE orders SET delivery_type = 'pickup', delivery_cost = '0.00', delivery_address_id = NULL, store_id = ? WHERE order_id = ?");
             $stmt->bind_param("ii", $store_id, $order_id);
         }
         

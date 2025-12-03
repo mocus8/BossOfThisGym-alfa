@@ -1,4 +1,5 @@
 <?php
+// тут не хватает многих проверок для продакшена, потом зарефакторить с остальными api
 session_start();
 require_once __DIR__ . '/helpers.php';
 
@@ -121,7 +122,9 @@ switch ($action) {
         break;
 }
 
-// 4. ОБНОВЛЯЕМ ОБЩУЮ СУММУ ЗАКАЗА (ИСПРАВЛЕННАЯ ВЕРСИЯ)
+// 4. ОБНОВЛЯЕМ ОБЩУЮ СУММУ ЗАКАЗА
+
+// получаем новую сумму товаров
 $stmt = $connect->prepare("
     SELECT SUM(p.price * po.amount) as total 
     FROM product_order po 
@@ -132,11 +135,29 @@ $stmt->bind_param("i", $orderId);
 $stmt->execute();
 $totalResult = $stmt->get_result();
 $totalRow = $totalResult->fetch_assoc();
-$newTotalPrice = $totalRow['total'] ?? 0;
+$itemsTotal = $totalRow['total'] ?? 0;
 
-// Обновляем total_price в orders
-$updateStmt = $connect->prepare("UPDATE orders SET total_price = ? WHERE order_id = ?");
-$updateStmt->bind_param("di", $newTotalPrice, $orderId);
+// получаем текущий тип доставки для расчета
+$stmt = $connect->prepare("
+    SELECT delivery_type FROM orders WHERE order_id = ?
+");
+$stmt->bind_param("i", $orderId);
+$stmt->execute();
+$TypeResult = $stmt->get_result();
+$TypeData = $TypeResult->fetch_assoc();
+$orderType = $TypeData['delivery_type'] ?? null;
+
+// перерасчитываем стоимость доставки и итоговую
+$deliveryCost = 0;
+if ($orderType == 'delivery' && $itemsTotal != 0 && $itemsTotal < 5000) { 
+    $deliveryCost = 750;
+}
+
+$newTotalPrice = $itemsTotal + $deliveryCost;
+
+// Обновляем стоимость доставки и итоговую в orders
+$updateStmt = $connect->prepare("UPDATE orders SET total_price = ?, delivery_cost = ? WHERE order_id = ?");
+$updateStmt->bind_param("ddi", $newTotalPrice, $deliveryCost, $orderId);
 $updateStmt->execute();
 $updateStmt->close();
 

@@ -12,8 +12,14 @@ $orderId = $input['order_id'] ?? '';
 $userId = $_SESSION['user']['id'] ?? null;
 
 if (!$userId || !$orderId) {
-    http_response_code(400);
+    http_response_code(400); // Bad Request
     echo json_encode(['error' => 'INVALID_REQUEST']);
+    exit();
+}
+
+if (!is_numeric($orderId) || $orderId <= 0) {
+    http_response_code(400);
+    echo json_encode(['error' => 'INVALID_ORDER_ID']);
     exit();
 }
 
@@ -21,17 +27,18 @@ require_once __DIR__ . '/src/getOrderData.php';
 
 try {
     if (empty($orderItems)) {
+        http_response_code(404); // Not Found
         throw new Exception('ORDER_NOT_FOUND');
     }
 
     $connect = getDB();
     if (!$connect) {
-        throw new Exception('DATABASE_CONNECT_FAILED');
+        http_response_code(503); // Service Unavailable
+        throw new Exception('DATABASE_ERROR');
     }
 
     // ставим ожидание блокировок как 5 секунд, потом ошибка от sql
     $connect->query("SET SESSION innodb_lock_wait_timeout = 5");
-
     // начинаем транзакцию (либо все либо ничего для sql)
     $connect->begin_transaction();
 
@@ -50,7 +57,8 @@ try {
     ");
     
     if (!$stmt) {
-        throw new Exception('DATABASE_QUERY_FAILED');
+        http_response_code(500); // Internal Server Error (Внутренняя ошибка сервера)
+        throw new Exception('DATABASE_ERROR');
     }
     
     $stmt->bind_param("ii", $orderId, $userId);
@@ -60,15 +68,28 @@ try {
     $stmt->close();
 
     if (!$order) {
+        http_response_code(404); // Not Found
         throw new Exception('ORDER_NOT_FOUND');
     }
 
     if ($order['status'] === 'paid') {
+        http_response_code(409); // Conflict - заказ уже оплачен
         throw new Exception('ORDER_ALREADY_PAID');
+    }
+
+    if ($order['status'] === 'cancelled') {
+        http_response_code(410); // Gone
+        throw new Exception('ORDER_CANCELLED');
+    }
+    
+    if ($order['status'] === 'expired') {
+        http_response_code(410); // Gone
+        throw new Exception('ORDER_EXPIRED');
     }
 
     // проверяем телефон (почту в будующем) для отправки чеков (важно, поэтому отдельно проверяем)
     if (empty($order['login'])) {
+        http_response_code(422); // Unprocessable Entity
         throw new Exception('EMPTY_USER_PHONE');
     }
 
@@ -86,6 +107,7 @@ try {
                 $connect->close();
 
                 // Возвращаем существующую ссылку
+                http_response_code(200); // успех
                 echo json_encode([
                     'confirmation_url' => $yookassaExistingPayment->getConfirmation()->getConfirmationUrl()
                 ]);
@@ -107,13 +129,24 @@ try {
                 $connect->commit();
                 $connect->close();
 
-                // эту ошибку отрабатывать на фронте
+                http_response_code(409); // Conflict
                 echo json_encode(['error' => 'ORDER_ALREADY_PAID']);
 
                 exit;
             }
+
+        } catch (\YooKassa\Common\Exceptions\NotFoundException $e) {
+            // Платеж не найден - нормально, создаем новый
+
+        } catch (\YooKassa\Common\Exceptions\ApiException $e) {
+            // Все остальные ошибки ЮКассы
+            // Логируем но продолжаем (graceful degradation)
+            error_log("YooKassa API error [Order: {$orderId}]: " . $e->getMessage());
+            
         } catch (Exception $e) {
-            // Платеж не найден - продолжаем
+            // Неожиданные исключения (не от ЮКассы)
+            error_log("Unexpected error in payment check [Order: {$orderId}]: " . $e->getMessage());
+            throw $e; // Пробрасываем в основной catch
         }
     }
 
@@ -160,6 +193,7 @@ try {
     }
 
     if (abs($receiptTotal - (float)$order['total_price']) > 0.01) {
+        http_response_code(422); // Unprocessable Entity
         throw new Exception('RECEIPT_TOTAL_MISMATCH');
     }
 
@@ -191,11 +225,17 @@ try {
         ], $idempotenceKey);
 
     } catch (\YooKassa\Common\Exceptions\ApiException $e) {
+        http_response_code(502); // Bad Gateway
         error_log("YooKassa API error: " . $e->getMessage());
         throw new Exception('PAYMENT_SYSTEM_ERROR');
     } catch (\YooKassa\Common\Exceptions\BadApiRequestException $e) {
+        http_response_code(400); // Bad Request
         error_log("YooKassa bad request: " . $e->getMessage());
         throw new Exception('INVALID_PAYMENT_DATA');
+    } catch (\YooKassa\Common\Exceptions\ApiConnectionException $e) {
+        http_response_code(503); // Service Unavailable
+        error_log("YooKassa connection error: " . $e->getMessage());
+        throw new Exception('PAYMENT_SERVICE_UNAVAILABLE');
     }
 
     // устанавливаем в бд устаревание оплаты через 30 минут
@@ -215,6 +255,7 @@ try {
     $connect->commit();
 
     // возвращаем ссылку для оплаты с нужными данными (создала юкасса)
+    http_response_code(201); // Created (лучше чем 200 для создания ресурса)
     echo json_encode([
         'confirmation_url' => $payment->getConfirmation()->getConfirmationUrl()
     ]);
@@ -222,8 +263,10 @@ try {
 // ловим таймаут по блокировке в бд (если FOR UPDATE сработал)
 } catch (mysqli_sql_exception $e) {
     if ($e->getCode() == 1205) {
+        http_response_code(409); // Conflict
         echo json_encode(['error' => 'PAYMENT_IN_PROGRESS']);
     } else {
+        http_response_code(500); // Internal Server Error
         error_log("MySQL error [Order: $orderId]: " . $e->getMessage());
         echo json_encode(['error' => 'DATABASE_ERROR']);
     }
@@ -239,10 +282,40 @@ try {
     
 // ловим общие ошибки
 } catch (Exception $e) {
-    error_log("Payment error [Order: $orderId, User: $userId]: " . $e->getMessage());
+    // сливаем в логи только безопасные ошибки (те что сами создали, отсальные могут содержать секреты)
+    $safeErrorCodes = [
+        'ORDER_NOT_FOUND',
+        'ORDER_ALREADY_PAID',
+        'ORDER_CANCELLED',
+        'ORDER_EXPIRED',
+        'EMPTY_USER_PHONE',
+        'INVALID_PHONE_FORMAT',
+        'RECEIPT_TOTAL_MISMATCH',
+        'INVALID_PAYMENT_DATA',
+        'PAYMENT_SERVICE_UNAVAILABLE',
+        'DATABASE_ERROR'
+    ];
 
-    http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]);
+    $errorCode = $e->getMessage();
+
+    if (in_array($errorCode, $safeErrorCodes)) {
+        $error = $errorCode;
+    } else {
+        // Системная ошибка - общее сообщение
+        $error = 'PAYMENT_PROCESSING_ERROR';
+    }
+
+    // Логируем с маскировкой телефона (если почта то маскируем ее и т д)
+    $logMessage = preg_replace('/\+7\d{10}/', '[PHONE_MASKED]', $e->getMessage());
+    error_log("Payment error [Order: $orderId]: " . $logMessage);
+
+    // Уже установлен http_response_code выше в отдельных проверках
+    // Если не установлен, ставим 500
+    if (http_response_code() === 200 || http_response_code() === false) {
+        http_response_code(500);
+    }
+
+    echo json_encode(['error' => $error]);
     
     if (isset($connect)) {
         try {

@@ -86,6 +86,10 @@ document.querySelectorAll('.order_right_pay_button').forEach(button => {
         const isDelivery = document.getElementById('order-type-delivery').classList.contains('chosen');
         const deliveryAddress = document.getElementById('order-right-delivery-address').innerText;
         const pickupAddress = document.getElementById('order-right-pickup-address').innerText;
+        const originalText = button.textContent;
+
+        button.disabled = true;
+        button.textContent = 'Создаем платеж...';
         
         if (isDelivery && deliveryAddress.includes("не указан")) {
             document.getElementById("error-pay-delivery-no-address").classList.add("open");
@@ -103,21 +107,28 @@ document.querySelectorAll('.order_right_pay_button').forEach(button => {
                         order_id: orderId
                     })
                 });
+                                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
                 
-                console.log('Status:', response.status);
-                const rawText = await response.text();
-                console.log('Raw response:', rawText);
-                
-                const result = JSON.parse(rawText);
+                const result = await response.json();
                 
                 if (result.confirmation_url) {
                     window.location.href = result.confirmation_url;
+
                 } else {
                     throw new Error(result.error || 'Payment error');
                 }
+
             } catch (error) {
                 console.error('Full error:', error);
                 alert('Ошибка: ' + error.message);
+
+            } finally {
+                button.disabled = false;
+                button.textContent = originalText;
             }
         }
     });
